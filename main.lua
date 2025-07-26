@@ -8,7 +8,7 @@
 	
 function _init()
     --debug
-    display_hitbox = true
+    --display_hitbox = true
     
     --initialize game state and global timer
     game_state = "game_start"
@@ -45,10 +45,10 @@ function _init()
 		hb = {},                      --hitbox={x1,y1,x2,y2}
 		i_frame_max = 15,             --total invincibility frames when hit
 		i_frame_count = 0,            --current i_frames remaining
-		rupees = 0,
+		rupees = 185,
 		max_rupees = 200,
-		bombs = 5,
-		max_bombs = 5,
+		bombs = 0,
+		max_bombs = 3,
 		keys = 0,
 		max_keys = 3
 	}
@@ -112,43 +112,45 @@ function _init()
 	bomb_coord = {} --x,y
 
 	--enemy variables
-	enemies = {} --{id,sp,x,y,hp,hb}
+	enemies = {} --{id, sp, x, y, hp, hb_dim, hb_cur}
 	npc_anim_timer = 0
 	npc_anim_delay = 6
 	
 	--hitbox dimension definitions
 	--{x1,y1,x2,y2}
 	--coords relative to sp x,y
-	bat_hb = {
-		x1 = 1,
-		y1 = 1,
-		x2 = 5,
-		y2 = 3
+	hb_dims = {
+		bat = {
+			x1 = 1,
+			y1 = 1,
+			x2 = 5,
+			y2 = 3
+		},
+		
+		rupee = {
+			x1 = 1,
+			y1 = 1,
+			x2 = 6,
+			y2 = 6
+		},
+		
+		--this is for picking up the
+		--item, not for the explosion
+		bomb = {
+			x1 = 0,
+			y1 = 2,
+			x2 = 4,
+			y2 = 6
+		},
+		
+		key = {
+			x1 = 0,
+			y1 = 0,
+			x2 = 7,
+			y2 = 7
+		}
 	}
-	
-	rupee_hb = {
-		x1 = 1,
-		y1 = 1,
-		x2 = 6,
-		y2 = 6
-	}
-	
-	--this is for picking up the
-	--item, not for the explosion
-	bomb_hb = {
-		x1 = 0,
-		y1 = 2,
-		x2 = 4,
-		y2 = 6
-	}
-	
-	key_hb = {
-		x1 = 0,
-		y1 = 0,
-		x2 = 7,
-		y2 = 7
-	}
-	
+
 	--music
 	--song of healing
 	soh_pos = 1 --time tracking
@@ -156,17 +158,20 @@ function _init()
 		track1 = {32, 32, 33, 34, 35, 36, 35, 37},
 		track2 = {38, 38, 39, 39, 40, 41, 40, 42},
 	}
-		
+
 	--spawn some bats for testing
-	add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb = bat_hb} )	
-	add(enemies, {id = "bat", sp = 65, x = 32, y = 32, hp = 1, hb = bat_hb} )
-	add(enemies, {id = "bat", sp = 64, x = 20, y = 40, hp = 1, hb = bat_hb} )
+	add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )	
+	add(enemies, {id = "bat", sp = 65, x = 32, y = 32, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )
+	add(enemies, {id = "bat", sp = 64, x = 20, y = 40, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )
+	add(enemies, {id = "bat", sp = 64, x = 80, y = 50, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )	
+	add(enemies, {id = "bat", sp = 65, x = 90, y = 60, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )
+	add(enemies, {id = "bat", sp = 64, x = 80, y = 60, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )
 
 	--spawn some rupees for testing
 	add(items, {id = "rp_g", sp = 240, x = 20, y = 30} )
 	add(items, {id = "rp_g", sp = 240, x = 35, y = 50} )
-	add(items, {id="rp_b",sp=241,x=37,y=60} )
-	add(items, {id="rp_r",sp=242,x=40,y=70} )
+	add(items, {id = "rp_b", sp = 241, x = 37, y = 60} )
+	add(items, {id = "rp_r", sp = 242, x = 40, y = 70} )
 	
 	--spawn bombs for testing
 	add(items, {id = "bomb", sp = 224, x = 5, y = 10} )
@@ -180,9 +185,6 @@ function _init()
 	add(items, {id = "key", sp = 243, x = 75, y = 90} )
 	add(items, {id = "key", sp = 243, x = 40, y = 15} )
 	add(items, {id = "key", sp = 243, x = 85, y = 90} )
-
-
-	in_circle_test = false
 end --end init
 
 --update
@@ -218,14 +220,6 @@ function _update()
 		
 		--sfx
 		bomb_sfx()
-		
-        --just for testing
-        test_cx = 0
-        test_cy = 0
-        test_r = 40
-		
-		in_circle_test = in_circle(p.x, p.y, test_cx, test_cy, test_r)
-		--end of just for testing
 		
 		--music
 		if time() > 0.2 then
@@ -272,9 +266,6 @@ function _draw()
 		draw_bomb_ui()
 		draw_key_ui()
 	end--end "game start" draw
-	
-	circ(test_cx, test_xy, test_r, 11)
-	print(in_circle_test)
 end--end _draw()
 
 --general functions
@@ -485,7 +476,7 @@ function in_circle(x, y, cx, cy, r)
 	local dx = x - cx
 	local dy = y - cy
 	
-	return x*x + y*y <= r*r
+	return dx*dx + dy*dy <= r*r
 end
 
 --player functions
@@ -844,23 +835,10 @@ function player_collision()
 	--player takes damage if
 	--collision with enemy detected
 	for e in all(enemies) do
-		local box --store enemy hb
-		
-        --replace this with an extra variable in eneimies and a function (i.e, "get_enemy_hb()")
-		if e.id == "bat" then
-		    box = {
-				x1 = e.x + bat_hb.x1,
-				y1 = e.y + bat_hb.y1,
-				x2 = e.x + bat_hb.x2,
-				y2 = e.y + bat_hb.y2
-			}
-		--elseif e.id=="skel"
-		--elseif e.id=="slime"
-		end --end enemy id detect
-		
-		if box ~= nil then
+		if e.hb_cur ~= nil then
+			
 			--player collision with enemy
-			if collision(p.hb, box) then
+			if collision(p.hb, e.hb_cur) then
 				if p.i_frame_count == 0 then
 					sfx(5)
 					p.hp -= 0.5
@@ -871,7 +849,7 @@ function player_collision()
 			--sword collison with enemy
 			if p.att_hb ~= nil and p.att_count == p.att_time then
 				--att_hb exists, and on first frame of attack
-				if collision(p.att_hb, box) then
+				if collision(p.att_hb, e.hb_cur) then
 					e.hp -= 1
 					if e.hp == 0 then
 						--death sfx
@@ -894,10 +872,10 @@ function collect_item()
 		if i.id == "rp_g" or i.id=="rp_b" or i.id=="rp_r" then
 			--replace this with an extra variable in items[]?
             box = {
-				x1 = i.x + rupee_hb.x1,
-				y1 = i.y + rupee_hb.y1,
-				x2 = i.x + rupee_hb.x2,
-				y2 = i.y + rupee_hb.y2
+				x1 = i.x + hb_dims.rupee.x1,
+				y1 = i.y + hb_dims.rupee.y1,
+				x2 = i.x + hb_dims.rupee.x2,
+				y2 = i.y + hb_dims.rupee.y2
 			}
 
 			if collision(p.hb, box) then
@@ -916,10 +894,10 @@ function collect_item()
 
 		if i.id == "bomb" then
 			box = {
-				x1 = i.x + bomb_hb.x1,
-				y1 = i.y + bomb_hb.y1,
-				x2 = i.x + bomb_hb.x2,
-				y2 = i.y + bomb_hb.y2
+				x1 = i.x + hb_dims.bomb.x1,
+				y1 = i.y + hb_dims.bomb.y1,
+				x2 = i.x + hb_dims.bomb.x2,
+				y2 = i.y + hb_dims.bomb.y2
 			}
 
 			if collision(p.hb, box) then
@@ -934,11 +912,12 @@ function collect_item()
         --keys
 		if i.id == "key" then
 			box = {
-				x1 = i.x + key_hb.x1,
-				y1 = i.y + key_hb.y1,
-				x2 = i.x + key_hb.x2,
-				y2 = i.y + key_hb.y2
+				x1 = i.x + hb_dims.key.x1,
+				y1 = i.y + hb_dims.key.y1,
+				x2 = i.x + hb_dims.key.x2,
+				y2 = i.y + hb_dims.key.y2
 			}
+
 			if collision(p.hb, box) then
 				if p.keys < p.max_keys then
 					sfx(6)
@@ -979,6 +958,13 @@ end
 --enemy functions
 function update_enemies()
 	for e in all(enemies) do
+		--update current hitbox positon
+		e.hb_cur.x1 = e.x + e.hb_dim.x1
+		e.hb_cur.y1 = e.y + e.hb_dim.y1 
+		e.hb_cur.x2 = e.x + e.hb_dim.x2
+		e.hb_cur.y2 = e.y + e.hb_dim.y2
+
+		--update animations
 		if e.id == "bat" then
 			e.sp = 64 + npc_anim_timer%2
 		end --bats
@@ -994,42 +980,27 @@ function draw_enemies()
 			--hitbox
 			if display_hitbox == true then
 				color(10)
-				rect(
-					e.x + bat_hb.x1,
-					e.y + bat_hb.y1,
-					e.x + bat_hb.x2,
-					e.y + bat_hb.y2)
-                --test e.hb as replacement for the above
-                rect(e.hb.x1 - 1, e.hb.y1 - 1, e.hb.x2 + 1, e.hb.y2 + 1)
+                rect(e.hb_cur.x1, e.hb_cur.y1, e.hb_cur.x2, e.hb_cur.y2)
 			end --bat hitbox
 		end --bats
 	end -- for e in all enemies
 end --draw_enemies()
 
-function enemy_in_bomb_r(ehb)
-	--ehb=enemy hitbox
-    
-    --check this - could be the source of the issue with the bombs not doing damage
-	if bomb_explode_time == bomb_explode_time_start - 5 then
-		return  in_circle(ehb.x1, ehb.y1, bomb_coord.x, bomb_coord.y, bomb_explode_r) or 
-                in_circle(ehb.x2, ehb.y1, bomb_coord.x,	bomb_coord.y, bomb_explode_r) or 
-                in_circle(ehb.x1, ehb.y2, bomb_coord.x,	bomb_coord.y, bomb_explode_r) or 
-                in_circle(ehb.x2, ehb.y2, bomb_coord.x, bomb_coord.y, bomb_explode_r)
-	else
-		return false
+function enemy_in_bomb_r(hb_cur)
+	if bomb_explode_time == bomb_explode_time_start - 5 then	
+		for i = hb_cur.x1, hb_cur.x2 do
+			for j = hb_cur.y1, hb_cur.y2 do
+				if  in_circle(i, j, bomb_coord.x+3, bomb_coord.y+4, bomb_explode_r) then
+					return true
+				end
+			end
+		end
 	end
 end
 
 function enemy_take_bomb_dmg()
 	for e in all(enemies) do
-		local box = {
-			x1 = e.x + e.hb.x1,
-			y1 = e.y + e.hb.y1,
-			x2 = e.x + e.hb.x2,
-			y2 = e.y + e.hb.y2
-		}
-
-		if enemy_in_bomb_r(box) then
+		if enemy_in_bomb_r(e.hb_cur) then
 			e.hp -= 1
 			if e.hp <= 0 then
 				del(enemies, e)
@@ -1067,5 +1038,5 @@ function play_song_of_healing()
 		else
 			soh_pos = 1
 		end
-	end	--track 2	
+	end	--track 2
 end --song of healing
