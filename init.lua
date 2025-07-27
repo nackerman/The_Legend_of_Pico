@@ -465,7 +465,7 @@ end
 
 function draw_bomb_explode()
 	if bomb_explode then
-		circfill(bomb_coord.x + 3, bomb_coord.y + 4, bomb_explode_r, 7 + global_timer%2)
+		circfill(bomb_coord.x + 3, bomb_coord.y + 4, bomb_explode_r, 9 + global_timer%2)
 	end
 end
 
