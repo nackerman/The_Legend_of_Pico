@@ -14,7 +14,7 @@ Explore a retro-style world, solve puzzles, and defeat enemies — all within th
 
 ## Screenshots
 
-<!-- To be added as development progresses -->
+To be added as development progresses
 
 ## Getting Started
 
