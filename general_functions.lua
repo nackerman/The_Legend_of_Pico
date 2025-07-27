@@ -199,7 +199,7 @@ function draw_bomb_explode()
 	end
 end
 
-function in_circle(x, y, cx, cy, r)
+function is_in_circle(x, y, cx, cy, r)
 	--x,y=point to be tested
 	--cx,cy=center of circ
 	--r=rad of circ
@@ -207,4 +207,16 @@ function in_circle(x, y, cx, cy, r)
 	local dy = y - cy
 	
 	return dx*dx + dy*dy <= r*r
+end
+
+function hitbox_in_bomb_r(hb_cur)
+	if bomb_explode_time == bomb_explode_time_start - 5 then	
+		for i = hb_cur.x1, hb_cur.x2 do
+			for j = hb_cur.y1, hb_cur.y2 do
+				if  is_in_circle(i, j, bomb_coord.x+3, bomb_coord.y+4, bomb_explode_r) then
+					return true
+				end
+			end
+		end
+	end
 end

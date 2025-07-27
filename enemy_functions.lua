@@ -28,21 +28,9 @@ function draw_enemies()
 	end -- for e in all enemies
 end --draw_enemies()
 
-function enemy_in_bomb_r(hb_cur)
-	if bomb_explode_time == bomb_explode_time_start - 5 then	
-		for i = hb_cur.x1, hb_cur.x2 do
-			for j = hb_cur.y1, hb_cur.y2 do
-				if  in_circle(i, j, bomb_coord.x+3, bomb_coord.y+4, bomb_explode_r) then
-					return true
-				end
-			end
-		end
-	end
-end
-
 function enemy_take_bomb_dmg()
 	for e in all(enemies) do
-		if enemy_in_bomb_r(e.hb_cur) then
+		if hitbox_in_bomb_r(e.hb_cur) then
 			e.hp -= 1
 			if e.hp <= 0 then
 				del(enemies, e)

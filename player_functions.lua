@@ -470,5 +470,21 @@ function deploy_bomb()
 	end
 end
 
-function player_in_bomb_dmg()
+function player_take_bomb_dmg()
+	if hitbox_in_bomb_r(p.hb) then
+		p.hp -= 1
+        sfx(5)
+	end
+end
+
+function is_player_dead()
+    if p.hp <= 0 then 
+        if p.is_dead == false then
+            p.time_of_death = time()
+            p.is_dead = true
+        end
+        return true
+    else 
+        return false 
+    end
 end

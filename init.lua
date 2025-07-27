@@ -1,3 +1,4 @@
+radius_background_circ_vignette = 0
 --**********************************
 --note regarding sprite flags:
 --f0: inhibits player move
@@ -49,7 +50,9 @@ function _init()
 		bombs = 0,
 		max_bombs = 3,
 		keys = 0,
-		max_keys = 3
+		max_keys = 3,
+		is_dead = false,
+		time_of_death
 	}
 	
 	--directional buttons
@@ -157,6 +160,14 @@ function _init()
 		track1 = {32, 32, 33, 34, 35, 36, 35, 37},
 		track2 = {38, 38, 39, 39, 40, 41, 40, 42},
 	}
+
+
+	--death screen vignette
+	radius_outer_death_vignette = 110
+	radius_inner_death_vignette = 90
+	radius_outer_death_vignette_min = 35
+	radius_inner_death_vignette_min = 15
+	
 
 	--spawn some bats for testing
 	add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )	
