@@ -41,10 +41,6 @@ function _update()
         
         else -- player is dead
             i_frame_count = 0
-            
-            --if time() - p.time_of_death > 4 then
-            --    radius_background_circ_vignette += 1
-            --end
 
             if radius_outer_death_vignette >= radius_outer_death_vignette_min then
                 radius_outer_death_vignette -= 5

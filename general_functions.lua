@@ -220,3 +220,20 @@ function hitbox_in_bomb_r(hb_cur)
 		end
 	end
 end
+
+function get_circle_bounds_at_y(y, cx, cy, r)
+	local x1 = -1
+	local x2 = -1
+	
+	-- Only check if the row falls within the circle to begin with
+	if (y - cy)*(y - cy) <= r*r then
+		local dx = sqrt(r*r - (y - cy)*(y - cy))
+		x1 = cx - dx
+		x2 = cx + dx
+	else
+		x1 = nil
+		x2 = nil
+	end
+
+	return {x1 = flr(x1), x2 = flr(x2)}
+end

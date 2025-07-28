@@ -1,4 +1,3 @@
-radius_background_circ_vignette = 0
 --**********************************
 --note regarding sprite flags:
 --f0: inhibits player move
@@ -35,8 +34,8 @@ function _init()
 		att_delay_count = 0,
 		att_held_prev = false,
 		att_hb,                     --sword hitbox
-		hp = 3,	                    --current hp
-		hp_max = 3,	                --current max hp
+		hp = 1,	                    --current hp
+		hp_max = 10,	                --current max hp
 		hp_true_max = 10,             --total max with upgrades (hp can never surpass this)
 		hp_sp_full = 192,             --full heart
 		hp_sp_half = 193,	            --half heart
@@ -47,7 +46,7 @@ function _init()
 		i_frame_count = 0,            --current i_frames remaining
 		rupees = 185,
 		max_rupees = 200,
-		bombs = 0,
+		bombs = 3,
 		max_bombs = 3,
 		keys = 0,
 		max_keys = 3,
@@ -165,8 +164,8 @@ function _init()
 	--death screen vignette
 	radius_outer_death_vignette = 110
 	radius_inner_death_vignette = 90
-	radius_outer_death_vignette_min = 35
-	radius_inner_death_vignette_min = 15
+	radius_outer_death_vignette_min = 30
+	radius_inner_death_vignette_min = 12
 	
 
 	--spawn some bats for testing

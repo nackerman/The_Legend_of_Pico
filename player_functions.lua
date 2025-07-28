@@ -17,10 +17,10 @@ function player_move()
     --if sprite is perfectly within a tile, all of these should equal 0.
 	local dist_top = p.y%8
     local dist_bot = 7 - ((p.y + 7)%8)
-    local dist_left=p.x%8
-    local dist_right=7 - ((p.x + 7)%8)
+    local dist_left = p.x%8
+    local dist_right = 7 - ((p.x + 7)%8)
 	
-	--if not attackig,
+	--if not attacking,
 	--process move inputs
 	if not p.att then
 		--move left
@@ -478,7 +478,7 @@ function player_take_bomb_dmg()
 end
 
 function is_player_dead()
-    if p.hp <= 0 then 
+	if p.hp <= 0 then 
         if p.is_dead == false then
             p.time_of_death = time()
             p.is_dead = true
