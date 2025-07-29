@@ -7,7 +7,7 @@
 	
 function _init()
     --debug
-    display_hitbox = true
+    display_hitbox = false
     
     --initialize game state and global timer
     game_mode = "endless_demo"
