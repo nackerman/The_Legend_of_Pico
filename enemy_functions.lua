@@ -60,16 +60,47 @@ end
 
 function spawn_enemies_endless()
 	while #enemies < 10 do
-		key = abs(ceil(rnd(1))) --just bats, for now
+		local key = abs(ceil(rnd(1))) --just bats, for now
+		local sp_x, sp_y
+
+		local x1 = enemy_type_def[key].hb_dims.x1
+		local y1 = enemy_type_def[key].hb_dims.y1
+		local x2 = enemy_type_def[key].hb_dims.x2
+		local y2 = enemy_type_def[key].hb_dims.y2
+
+		local wall = abs(ceil(rnd(3))) --1 = left, 2 = right, 3 = top, 4 = bottom
+
+		if wall == 1 then
+			sp_x = 0
+			sp_y = abs(ceil(rnd(127 - y1)))
+		end
+		if wall == 2 then
+			sp_x = 127 - x2
+			sp_y = abs(ceil(rnd(127)))
+		end
+		if wall == 3 then
+			sp_x = abs(ceil(rnd(127 - x2)))
+			sp_y = 8
+		end
+		if wall == 4 then
+			sp_x = abs(ceil(rnd(127 - x2)))
+			sp_y = 127 - y1
+		end
 
 		add(enemies, 
 				{	
 					id = enemy_type_def[key].id,
-					sp = 64, x = rnd(127),
-					y = rnd(127),
+					sp = 64, 
+					x = sp_x,
+					y = sp_y,
 					hp = enemy_type_def[key].hp_start,
 					hb_dims = enemy_type_def[key].hb_dims,
-					hb_cur = {},
+					hb_cur = {
+						x1 = x1 + sp_x,
+						y1 = y1 + sp_y,
+						x2 = x2 + sp_x,
+						y2 = y2 + sp_y
+					},
 					sword_dmg_taken = false
 				}
 			)
