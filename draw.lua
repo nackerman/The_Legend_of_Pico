@@ -35,6 +35,10 @@ function _draw()
             draw_rupee_ui()
             draw_bomb_ui()
             draw_key_ui()
+            print(enemy_type_def[1].hb_dims.x1)
+            print(enemy_type_def[1].hb_dims.y1)
+            print(enemy_type_def[1].hb_dims.x2)
+            print(enemy_type_def[1].hb_dims.y2)
         
         else -- player is dead
             local cx = p.x + 4
@@ -76,7 +80,8 @@ function _draw()
             end
             
             draw_player()  --maybe update to a "death" pose, instead of just drawing the player?
-            
+            draw_player_hp()
+
         end --is_player_dead()
     end -- game_start
 end--end _draw()

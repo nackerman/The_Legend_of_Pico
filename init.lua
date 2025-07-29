@@ -7,10 +7,11 @@
 	
 function _init()
     --debug
-    --display_hitbox = true
+    display_hitbox = true
     
     --initialize game state and global timer
-    game_state = "game_start"
+    game_mode = "endless_demo"
+	game_state = "game_start"
 	global_timer = 0
 
 	--player variables
@@ -113,10 +114,37 @@ function _init()
 	bomb_coord = {} --x,y
 
 	--enemy variables
-	enemies = {} --{id, sp, x, y, hp, hb_dim, hb_cur}
+	enemies = {} 
+		--{
+			--id,  				--id, i.e., "bat"
+			--sp, 				--sprite number
+			--x, 				--sprite x positon
+			--y, 				--sprite y position
+			--hp, 				--health
+			--hb_dims, 			--hitbox dimensions
+			--hb_cur, 			--current hitbox dimensions (relative to location)
+			--sword_dmg_taken	--has enemy taken sword damage from current sword attack?
+		--}
 	npc_anim_timer = 0
 	npc_anim_delay = 6
 	
+	--useful for spawning in a random enemy type
+	enemy_type_def = {
+		{	--bat
+			key = 1, 
+			id = "bat",
+			hp_start = "1",
+			hb_dims = {
+				x1 = 1,
+				y1 = 1,
+				x2 = 5,
+				y2 = 3
+			}
+		},
+		{key = 3, id = "slime", hp_start = "2"},
+		{key = 2, id = "skeleton", hp_start = "2"}
+	}
+
 	--hitbox dimension definitions
 	--{x1,y1,x2,y2}
 	--coords relative to sp x,y
@@ -169,12 +197,12 @@ function _init()
 	
 
 	--spawn some bats for testing
-	add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )	
-	add(enemies, {id = "bat", sp = 65, x = 32, y = 32, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )
-	add(enemies, {id = "bat", sp = 64, x = 20, y = 40, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )
-	add(enemies, {id = "bat", sp = 64, x = 80, y = 50, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )	
-	add(enemies, {id = "bat", sp = 65, x = 90, y = 60, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )
-	add(enemies, {id = "bat", sp = 64, x = 80, y = 60, hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )
+	add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
+	add(enemies, {id = "bat", sp = 65, x = 32, y = 32, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
+	add(enemies, {id = "bat", sp = 64, x = 20, y = 40, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
+	add(enemies, {id = "bat", sp = 64, x = 80, y = 50, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
+	add(enemies, {id = "bat", sp = 65, x = 90, y = 60, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
+	add(enemies, {id = "bat", sp = 64, x = 80, y = 60, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
 
 	--spawn some rupees for testing
 	add(items, {id = "rp_g", sp = 240, x = 20, y = 30} )

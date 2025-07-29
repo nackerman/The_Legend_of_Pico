@@ -140,6 +140,9 @@ function player_attack()
 		end
 	else
 		p.att = false
+		for e in all(enemies) do
+			e.sword_dmg_taken = false
+		end
 	end
 	
 	--check cooldown
@@ -281,7 +284,7 @@ function draw_player()
 	end--end player attack update
 end--end draw_player()
 
-function calc_hp_sprites()
+function calc_hp_sprites() --calc hearts to display in the UI
 	local sp_num = ceil(p.hp_max)
 	local xs = 1 --x start
 	local ys = 1 --y start
@@ -304,7 +307,7 @@ function calc_hp_sprites()
 	end
 end --calc_hp_sprites()
 
-function draw_player_hp()
+function draw_player_hp() --draw hearts in the UI
 	for s in all(p.hp_sp_coords) do
 		spr(s.sp, s.x, s.y)
 	end
@@ -367,9 +370,10 @@ function player_collision()
 			--sword collison with enemy
 			if p.att_hb ~= nil and p.att_count == p.att_time then
 				--att_hb exists, and on first frame of attack
-				if collision(p.att_hb, e.hb_cur) then
+				if collision(p.att_hb, e.hb_cur) and not e.sword_dmg_taken then
 					e.hp -= 1
-					if e.hp == 0 then
+					e.sword_dmg_taken = true
+					if e.hp <= 0 then
 						--death sfx
 						if e.id == "bat" then
 							sfx(3)
@@ -482,9 +486,20 @@ function is_player_dead()
         if p.is_dead == false then
             p.time_of_death = time()
             p.is_dead = true
+			i_frame_count = 0
         end
         return true
     else 
         return false 
     end
+end
+
+function calculate_player_death_vignettes()
+	if radius_outer_death_vignette >= radius_outer_death_vignette_min then
+		radius_outer_death_vignette -= 5
+	end
+	
+	if radius_inner_death_vignette >= radius_inner_death_vignette_min then
+		radius_inner_death_vignette -= 5
+	end
 end

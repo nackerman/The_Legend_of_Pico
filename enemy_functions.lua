@@ -1,10 +1,10 @@
 function update_enemies()
 	for e in all(enemies) do
 		--update current hitbox positon
-		e.hb_cur.x1 = e.x + e.hb_dim.x1
-		e.hb_cur.y1 = e.y + e.hb_dim.y1 
-		e.hb_cur.x2 = e.x + e.hb_dim.x2
-		e.hb_cur.y2 = e.y + e.hb_dim.y2
+		e.hb_cur.x1 = e.x + e.hb_dims.x1
+		e.hb_cur.y1 = e.y + e.hb_dims.y1 
+		e.hb_cur.x2 = e.x + e.hb_dims.x2
+		e.hb_cur.y2 = e.y + e.hb_dims.y2
 
 		--update animations
 		if e.id == "bat" then
@@ -55,5 +55,23 @@ function move_enemies()
 				end
 			end
 		end
+	end
+end
+
+function spawn_enemies_endless()
+	while #enemies < 10 do
+		key = abs(ceil(rnd(1))) --just bats, for now
+
+		add(enemies, 
+				{	
+					id = enemy_type_def[key].id,
+					sp = 64, x = rnd(127),
+					y = rnd(127),
+					hp = enemy_type_def[key].hp_start,
+					hb_dims = enemy_type_def[key].hb_dims,
+					hb_cur = {},
+					sword_dmg_taken = false
+				}
+			)
 	end
 end
