@@ -1,0 +1,17 @@
+# Ignore everything
+*
+
+# But do NOT ignore these files
+!zelda.p8
+!main.lua
+!init.lua
+!update.lua
+!draw.lua
+!general_functions.lua
+!player_functions.lua
+!enemy_functions.lua
+!sfx_music.lua
+!.gitignore
+!.gitattributes
+!README.md
+!LICENSE
