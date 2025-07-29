@@ -35,10 +35,6 @@ function _draw()
             draw_rupee_ui()
             draw_bomb_ui()
             draw_key_ui()
-            print(enemy_type_def[1].hb_dims.x1)
-            print(enemy_type_def[1].hb_dims.y1)
-            print(enemy_type_def[1].hb_dims.x2)
-            print(enemy_type_def[1].hb_dims.y2)
         
         else -- player is dead
             local cx = p.x + 4
