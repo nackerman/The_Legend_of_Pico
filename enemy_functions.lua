@@ -7,24 +7,31 @@ function update_enemies()
 		e.hb_cur.y2 = e.y + e.hb_dims.y2
 
 		--update animations
+		local sp_base
+		
 		if e.id == "bat" then
-			e.sp = 64 + npc_anim_timer%2
-		end --bats
+			sp_base = enemy_type_def[1].sp
+		end
+		if e.id == "slime" then
+			sp_base = enemy_type_def[2].sp
+		end
+		if e.id == "skeleton" then
+			sp_base = enemy_type_def[3].sp
+		end
+
+		e.sp = sp_base + npc_anim_timer%2
 	end --for e in all enemies
 end --update_enemies()
 
 function draw_enemies()
 	for e in all(enemies) do
-		--update this - it was initially set up for bats, but, it can be more generic now that the enemies table exists
-        if e.id == "bat" then
-			spr(e.sp, e.x, e.y)
-			
-			--hitbox
-			if display_hitbox == true then
-				color(10)
-                rect(e.hb_cur.x1, e.hb_cur.y1, e.hb_cur.x2, e.hb_cur.y2)
-			end --bat hitbox
-		end --bats
+		spr(e.sp, e.x, e.y)
+		
+		--hitbox
+		if display_hitbox == true then
+			color(10)
+			rect(e.hb_cur.x1, e.hb_cur.y1, e.hb_cur.x2, e.hb_cur.y2)
+		end --bat hitbox
 	end -- for e in all enemies
 end --draw_enemies()
 
@@ -60,7 +67,7 @@ end
 
 function spawn_enemies_endless()
 	while #enemies < 10 do
-		local key = abs(ceil(rnd(1))) --just bats, for now
+		local key = abs(ceil(rnd(3))) --just bats, slimes, and skeletons, for now
 		local sp_x, sp_y
 
 		local x1 = enemy_type_def[key].hb_dims.x1
@@ -68,29 +75,36 @@ function spawn_enemies_endless()
 		local x2 = enemy_type_def[key].hb_dims.x2
 		local y2 = enemy_type_def[key].hb_dims.y2
 
-		local wall = abs(ceil(rnd(3))) --1 = left, 2 = right, 3 = top, 4 = bottom
+		local wall = abs(ceil(rnd(4))) --1 = left, 2 = right, 3 = top, 4 = bottom
 
+		-- spawn left edge of screen
 		if wall == 1 then
 			sp_x = 0
-			sp_y = abs(ceil(rnd(127 - y1)))
+			sp_y = abs(ceil(rnd(127 - y2))) + y2
 		end
+		
+		--spawn right edge of screen
 		if wall == 2 then
 			sp_x = 127 - x2
-			sp_y = abs(ceil(rnd(127)))
+			sp_y = abs(ceil(rnd(127 - y2))) + y1
 		end
+
+		--spawn top edge of screen
 		if wall == 3 then
 			sp_x = abs(ceil(rnd(127 - x2)))
 			sp_y = 8
 		end
+
+		--spawn bottom edge of screen
 		if wall == 4 then
 			sp_x = abs(ceil(rnd(127 - x2)))
-			sp_y = 127 - y1
+			sp_y = 127 - y2
 		end
 
 		add(enemies, 
 			{	
 				id = enemy_type_def[key].id,
-				sp = 64, 
+				sp = enemy_type_def[key].sp, 
 				x = sp_x,
 				y = sp_y,
 				hp = enemy_type_def[key].hp_start,

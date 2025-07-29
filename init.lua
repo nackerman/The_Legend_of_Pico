@@ -133,7 +133,8 @@ function _init()
 		{	--bat
 			key = 1, 
 			id = "bat",
-			hp_start = "1",
+			sp = 64,
+			hp_start = 1,
 			hb_dims = {
 				x1 = 1,
 				y1 = 1,
@@ -141,8 +142,30 @@ function _init()
 				y2 = 3
 			}
 		},
-		{key = 3, id = "slime", hp_start = "2"},
-		{key = 2, id = "skeleton", hp_start = "2"}
+		
+		{	--slime
+			key = 3,
+			id = "slime",
+			sp = 80,
+			hp_start = 2,	
+			hb_dims = {
+				x1 = 0,
+				y1 = 0,
+				x2 = 7,
+				y2 = 7
+			}
+		},
+		{	key = 2,
+			id = "skeleton",
+			sp = 96,
+			hp_start = 3,
+			hb_dims = {
+				x1 = 0,
+				y1 = 0,
+				x2 = 7,
+				y2 = 7
+			}
+		},
 	}
 
 	--hitbox dimension definitions
@@ -195,31 +218,31 @@ function _init()
 	radius_outer_death_vignette_min = 30
 	radius_inner_death_vignette_min = 12
 	
-
+	--add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
 	--spawn some bats for testing
-	add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
-	add(enemies, {id = "bat", sp = 65, x = 32, y = 32, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
-	add(enemies, {id = "bat", sp = 64, x = 20, y = 40, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
-	add(enemies, {id = "bat", sp = 64, x = 80, y = 50, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
-	add(enemies, {id = "bat", sp = 65, x = 90, y = 60, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
-	add(enemies, {id = "bat", sp = 64, x = 80, y = 60, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
+	--add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
+	--add(enemies, {id = "bat", sp = 65, x = 32, y = 32, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
+	--add(enemies, {id = "bat", sp = 64, x = 20, y = 40, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
+	--add(enemies, {id = "bat", sp = 64, x = 80, y = 50, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
+	--add(enemies, {id = "bat", sp = 65, x = 90, y = 60, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
+	--add(enemies, {id = "bat", sp = 64, x = 80, y = 60, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
 
 	--spawn some rupees for testing
-	add(items, {id = "rp_g", sp = 240, x = 20, y = 30} )
-	add(items, {id = "rp_g", sp = 240, x = 35, y = 50} )
-	add(items, {id = "rp_b", sp = 241, x = 37, y = 60} )
-	add(items, {id = "rp_r", sp = 242, x = 40, y = 70} )
+	--add(items, {id = "rp_g", sp = 240, x = 20, y = 30} )
+	--add(items, {id = "rp_g", sp = 240, x = 35, y = 50} )
+	--add(items, {id = "rp_b", sp = 241, x = 37, y = 60} )
+	--add(items, {id = "rp_r", sp = 242, x = 40, y = 70} )
 	
 	--spawn bombs for testing
-	add(items, {id = "bomb", sp = 224, x = 5, y = 10} )
-	add(items, {id = "bomb", sp = 224, x = 80, y = 80} )
-	add(items, {id = "bomb", sp = 224, x = 5, y = 20} )
-	add(items, {id = "bomb", sp = 224, x = 80, y = 90} )
-	add(items, {id = "bomb", sp = 224, x = 16, y = 10} )
-	add(items, {id = "bomb", sp = 224, x = 70, y = 80} )
+	--add(items, {id = "bomb", sp = 224, x = 5, y = 10} )
+	--add(items, {id = "bomb", sp = 224, x = 80, y = 80} )
+	--add(items, {id = "bomb", sp = 224, x = 5, y = 20} )
+	--add(items, {id = "bomb", sp = 224, x = 80, y = 90} )
+	--add(items, {id = "bomb", sp = 224, x = 16, y = 10} )
+	--add(items, {id = "bomb", sp = 224, x = 70, y = 80} )
 	--spawn bombs for testing
-	add(items, {id = "key", sp = 243, x = 30, y = 15} )
-	add(items, {id = "key", sp = 243, x = 75, y = 90} )
-	add(items, {id = "key", sp = 243, x = 40, y = 15} )
-	add(items, {id = "key", sp = 243, x = 85, y = 90} )
+	--add(items, {id = "key", sp = 243, x = 30, y = 15} )
+	--add(items, {id = "key", sp = 243, x = 75, y = 90} )
+	--add(items, {id = "key", sp = 243, x = 40, y = 15} )
+	--add(items, {id = "key", sp = 243, x = 85, y = 90} )
 end --end init
