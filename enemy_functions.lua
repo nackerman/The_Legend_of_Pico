@@ -88,21 +88,21 @@ function spawn_enemies_endless()
 		end
 
 		add(enemies, 
-				{	
-					id = enemy_type_def[key].id,
-					sp = 64, 
-					x = sp_x,
-					y = sp_y,
-					hp = enemy_type_def[key].hp_start,
-					hb_dims = enemy_type_def[key].hb_dims,
-					hb_cur = {
-						x1 = x1 + sp_x,
-						y1 = y1 + sp_y,
-						x2 = x2 + sp_x,
-						y2 = y2 + sp_y
-					},
-					sword_dmg_taken = false
-				}
-			)
+			{	
+				id = enemy_type_def[key].id,
+				sp = 64, 
+				x = sp_x,
+				y = sp_y,
+				hp = enemy_type_def[key].hp_start,
+				hb_dims = enemy_type_def[key].hb_dims,
+				hb_cur = {
+					x1 = x1 + sp_x,
+					y1 = y1 + sp_y,
+					x2 = x2 + sp_x,
+					y2 = y2 + sp_y
+				},
+				sword_dmg_taken = false
+			}
+		)
 	end
 end
