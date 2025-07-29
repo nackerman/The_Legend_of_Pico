@@ -29,6 +29,7 @@ function _update()
             get_player_att_hitbox()
             calc_hp_sprites()
             collect_item()
+            move_enemies()
             is_player_dead()
 
             --sfx
@@ -38,7 +39,10 @@ function _update()
             if time() > 0.2 then
                 --play_song_of_healing()
             end
-        
+            
+            while #enemies < 10 do
+                add(enemies, {id = "bat", sp = 64, x = rnd(127), y = rnd(127), hp = 1, hb_dim = hb_dims.bat, hb_cur = {} } )
+            end
         else -- player is dead
             i_frame_count = 0
 

@@ -34,8 +34,8 @@ function _init()
 		att_delay_count = 0,
 		att_held_prev = false,
 		att_hb,                     --sword hitbox
-		hp = 1,	                    --current hp
-		hp_max = 10,	                --current max hp
+		hp = 3,	                    --current hp
+		hp_max = 3,	                --current max hp
 		hp_true_max = 10,             --total max with upgrades (hp can never surpass this)
 		hp_sp_full = 192,             --full heart
 		hp_sp_half = 193,	            --half heart

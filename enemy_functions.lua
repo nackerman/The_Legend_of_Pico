@@ -38,3 +38,22 @@ function enemy_take_bomb_dmg()
 		end
 	end
 end
+
+function move_enemies()
+	for e in all(enemies) do
+		--check direction to player
+		local dx = e.x - p.x
+		local dy = e.y - p.y
+		
+		if e.id == "bat" then
+			--move towards player
+			if global_timer%npc_anim_delay == 0 then
+				if (abs(dx) > abs(dy)) then
+					e.x = e.x - sgn(dx)
+				else
+					e.y = e.y - sgn(dy)
+				end
+			end
+		end
+	end
+end

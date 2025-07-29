@@ -75,8 +75,7 @@ function _draw()
                 fillp()
             end
             
-            --update to a "death" pose?
-            draw_player()
+            draw_player()  --maybe update to a "death" pose, instead of just drawing the player?
             
         end --is_player_dead()
     end -- game_start

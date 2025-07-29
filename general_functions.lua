@@ -83,17 +83,17 @@ function check_att_input()
 	return false
 end
 
-function collision(r1, r2)
+function collision(h1, h2)
 	--inclusive collision
-	--r1,r2={x1,y1,x2,y2}
+	--h1,h2={x1,y1,x2,y2}
 	--note: player collision with
 	--walls is handled elsewhere
 
 	return not (
-		r1.x2<r2.x1 or
-		r1.x1>r2.x2 or
-		r1.y2<r2.y1 or
-		r1.y1>r2.y2
+		h1.x2<h2.x1 or
+		h1.x1>h2.x2 or
+		h1.y2<h2.y1 or
+		h1.y1>h2.y2
 	)
 end --collision()
 
