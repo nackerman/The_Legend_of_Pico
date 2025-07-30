@@ -86,6 +86,14 @@ function _init()
 			["right"]   = false,
 			["up"]      = false,
 			["down"]    = false
+		},
+		--directional vectors - currently used in move_enemies()
+		vec = {
+			left = 	{ -1, 0 },
+			right = { 1, 0 },
+			up = 	{ 0, -1 },
+			down =	{ 0, 1 },
+			none =	{ 0, 0 } 
 		}
 	}--dir{}
 	
@@ -124,6 +132,7 @@ function _init()
 			--hb_dims, 			--hitbox dimensions
 			--hb_cur, 			--current hitbox dimensions (relative to location)
 			--sword_dmg_taken	--has enemy taken sword damage from current sword attack?
+			--bomb_dmg_taken	--has enemy taken bomb damage for this bomb cycle?
 		--}
 	npc_anim_timer = 0
 	npc_anim_delay = 6

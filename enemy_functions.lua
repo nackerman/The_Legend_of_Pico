@@ -25,7 +25,7 @@ end --update_enemies()
 
 function draw_enemies()
 	for e in all(enemies) do
-		if not e.sword_dmg_taken then
+		if not e.sword_dmg_taken and not e.bomb_dmg_taken then
 			--draw regular enemy sprite
 			spr(e.sp, e.x, e.y)
 		else
@@ -41,11 +41,14 @@ function draw_enemies()
 end --draw_enemies()
 
 function enemy_take_bomb_dmg()
-	for e in all(enemies) do
-		if hitbox_in_bomb_r(e.hb_cur) then
-			e.hp -= 1
-			if e.hp <= 0 then
-				del(enemies, e)
+	if bomb_explode then
+		for e in all(enemies) do
+			if hitbox_in_bomb_r(e.hb_cur) and not e.bomb_dmg_taken then
+				e.hp -= 1
+				e.bomb_dmg_taken = true
+				if e.hp <= 0 then
+					del(enemies, e)
+				end
 			end
 		end
 	end
@@ -54,29 +57,96 @@ end
 function move_enemies()
 	for e in all(enemies) do
 		--check direction to player
-		local dx = e.x - p.x
-		local dy = e.y - p.y
+		local dx_p = e.x - p.x --delta x to player
+		local dy_p = e.y - p.y -- delta y to player
+		local dx, dy
+		local can_move_left = true
+		local can_move_right = true
+		local can_move_up = true
+		local can_move_down = true
+
 		new_direction = nil
 
-		if (abs(dx) > abs(dy)) then --move in x direction
-			if sgn(dx) == 1 then
+		if (abs(dx_p) > abs(dy_p)) then --move in x direction
+			if sgn(dx_p) == 1 then
 				new_direction = "left"
 			else
 				new_direction = "right"
 			end
 		else -- move in y direction
-			if sgn(dy) == 1 then
+			if sgn(dy_p) == 1 then
 				new_direction = "up"
 			else
 				new_direction = "down"
 			end
 		end
 		
+		-- update dx and dy based on desired new direction
+		dx, dy = unpack(dir.vec[new_direction])
+
+		--check for collision with other enemies, prevent movement if collision would occur
+		for e1 in all(enemies) do
+			if e1 ~= e then
+				if new_direction == "left" then
+					if collision(
+						{ 	x1 = e.hb_cur.x1 - 1,
+							y1 = e.hb_cur.y1,
+							x2 = e.hb_cur.x2 - 1,
+							y2 = e.hb_cur.y1
+						}, e1.hb_cur) then
+						can_move_left = false
+					end
+				elseif new_direction == "right" then
+					if collision(
+						{ 	x1 = e.hb_cur.x1 + 1,
+							y1 = e.hb_cur.y1,
+							x2 = e.hb_cur.x2 + 1,
+							y2 = e.hb_cur.y1
+						}, e1.hb_cur) then
+						can_move_right = false
+					end
+				elseif new_direction == "up" then
+					if collision(
+						{ 	x1 = e.hb_cur.x1,
+							y1 = e.hb_cur.y1 - 1,
+							x2 = e.hb_cur.x2,
+							y2 = e.hb_cur.y1 - 1
+						}, e1.hb_cur) then
+						can_move_up = false
+					end
+				elseif new_direction == "down" then
+					if collision(
+						{ 	x1 = e.hb_cur.x1,
+							y1 = e.hb_cur.y1 + 1,
+							x2 = e.hb_cur.x2,
+							y2 = e.hb_cur.y1 + 1
+						}, e1.hb_cur) then
+						can_move_down = false
+					end
+				end
+			end
+		end
+		
+		-- move enemies in new direction if they aren't blocked and if not stunned from taking damage
 		if global_timer%npc_anim_delay == 0 then
-			if (abs(dx) > abs(dy)) then
-				e.x -= sgn(dx)
-			else
-				e.y -= sgn(dy)
+			if new_direction == "left" and can_move_left 
+			and not e.sword_dmg_taken and not e.bomb_dmg_taken then 
+				e.x += dx 
+			end
+			
+			if new_direction == "right" and can_move_right 
+			and not e.sword_dmg_taken and not e.bomb_dmg_taken then
+				e.x += dx
+			end
+
+			if new_direction == "up" and can_move_up 
+			and not e.sword_dmg_taken and not e.bomb_dmg_taken then 
+				e.y += dy
+			end
+
+			if new_direction == "down" and can_move_down 
+			and not e.sword_dmg_taken and not e.bomb_dmg_taken then
+				e.y += dy
 			end
 		end
 	end
@@ -132,7 +202,8 @@ function spawn_enemies_endless()
 					x2 = x2 + sp_x,
 					y2 = y2 + sp_y
 				},
-				sword_dmg_taken = false
+				sword_dmg_taken = false,
+				bomb_dmg_taken = false
 			}
 		)
 	end

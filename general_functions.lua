@@ -189,6 +189,9 @@ function update_active_bomb()
 		if bomb_explode_time == 0 then
 			bomb_explode = false
 			bomb_coord = {}
+			for e in all(enemies) do
+				e.bomb_dmg_taken = false
+			end
 		end
 	end
 end
@@ -209,13 +212,11 @@ function is_in_circle(x, y, cx, cy, r)
 	return dx*dx + dy*dy <= r*r
 end
 
-function hitbox_in_bomb_r(hb_cur)
-	if bomb_explode_time == bomb_explode_time_start - 5 then	
-		for i = hb_cur.x1, hb_cur.x2 do
-			for j = hb_cur.y1, hb_cur.y2 do
-				if  is_in_circle(i, j, bomb_coord.x+3, bomb_coord.y+4, bomb_explode_r) then
-					return true
-				end
+function hitbox_in_bomb_r(hb_cur)	
+	for i = hb_cur.x1, hb_cur.x2 do
+		for j = hb_cur.y1, hb_cur.y2 do
+			if  is_in_circle(i, j, bomb_coord.x+3, bomb_coord.y+4, bomb_explode_r) then
+				return true
 			end
 		end
 	end

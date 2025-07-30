@@ -475,9 +475,11 @@ function deploy_bomb()
 end
 
 function player_take_bomb_dmg()
-	if hitbox_in_bomb_r(p.hb) then
-		p.hp -= 1
-        sfx(5)
+	if bomb_explode then
+		if hitbox_in_bomb_r(p.hb) then
+			p.hp -= 1
+			sfx(5)
+		end
 	end
 end
 
