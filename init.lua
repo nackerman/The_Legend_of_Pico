@@ -221,7 +221,7 @@ function _init()
 	
 	--add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
 	--spawn some bats for testing
-	add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
+	--add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
 	--add(enemies, {id = "bat", sp = 65, x = 32, y = 32, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
 	--add(enemies, {id = "bat", sp = 64, x = 20, y = 40, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
 	--add(enemies, {id = "bat", sp = 64, x = 80, y = 50, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
