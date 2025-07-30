@@ -40,7 +40,7 @@ function _update()
             
             --music
             if time() > 0.2 then
-                --play_song_of_healing()
+                play_song_of_healing()
             end
 
         else -- player is dead

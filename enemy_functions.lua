@@ -178,7 +178,11 @@ function move_enemies()
 end
 
 function spawn_enemies_endless()
-	while #enemies < 30 do
+	local attempts = 0
+
+	while #enemies < 20 and attempts < 50 do
+		attempts += 1
+
 		local key = flr(rnd(3)) + 1 --just bats, slimes, and skeletons, for now
 		local sp_x, sp_y
 
@@ -214,6 +218,17 @@ function spawn_enemies_endless()
 		end
 
 		local can_spawn = true
+		
+		if collision(p.hb, 
+		{
+			x1 = x1 + sp_x,
+			y1 = y1 + sp_y,
+			x2 = x2 + sp_x,
+			y2 = y2 + sp_y
+		}) then
+			can_spawn = false
+		end
+
 		for e in all(enemies) do
 			if collision(e.hb_cur, 
 			{
