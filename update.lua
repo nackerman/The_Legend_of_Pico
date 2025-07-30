@@ -32,7 +32,7 @@ function _update()
             collect_item()
             
             if game_mode == "endless_demo" then
-                --spawn_enemies_endless() --"endless mode" demo
+                spawn_enemies_endless() --"endless mode" demo
             end
 
             --sfx
