@@ -178,7 +178,7 @@ function move_enemies()
 end
 
 function spawn_enemies_endless()
-	while #enemies < 10 do
+	while #enemies < 30 do
 		local key = flr(rnd(3)) + 1 --just bats, slimes, and skeletons, for now
 		local sp_x, sp_y
 
@@ -192,13 +192,13 @@ function spawn_enemies_endless()
 		-- spawn left edge of screen
 		if wall == 1 then
 			sp_x = 0
-			sp_y = ceil(rnd(127)) + y2
+			sp_y = ceil(rnd(127 - y2)) + y2
 		end
 		
 		--spawn right edge of screen
 		if wall == 2 then
 			sp_x = 127 - x2
-			sp_y = ceil(rnd(127 - y2)) + y1
+			sp_y = ceil(rnd(127 - y2)) + y2
 		end
 
 		--spawn top edge of screen
