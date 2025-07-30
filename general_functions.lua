@@ -238,3 +238,12 @@ function get_circle_bounds_at_y(y, cx, cy, r)
 
 	return {x1 = flr(x1), x2 = flr(x2)}
 end
+
+function get_hitbox_at(hb_dims, x, y)
+	return {
+		x1 = x + hb_dims.x1,
+		y1 = y + hb_dims.y1,
+		x2 = x + hb_dims.x2,
+		y2 = y + hb_dims.y2
+	}
+end

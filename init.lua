@@ -124,15 +124,19 @@ function _init()
 	--enemy variables
 	enemies = {} 
 		--{
+			--{
 			--id,  				--id, i.e., "bat"
 			--sp, 				--sprite number
 			--x, 				--sprite x positon
 			--y, 				--sprite y position
+			--x_next,			--desired next x pos
+			--y_next,			--desired next y pos
 			--hp, 				--health
 			--hb_dims, 			--hitbox dimensions
 			--hb_cur, 			--current hitbox dimensions (relative to location)
 			--sword_dmg_taken	--has enemy taken sword damage from current sword attack?
 			--bomb_dmg_taken	--has enemy taken bomb damage for this bomb cycle?
+			--}
 		--}
 	npc_anim_timer = 0
 	npc_anim_delay = 6
