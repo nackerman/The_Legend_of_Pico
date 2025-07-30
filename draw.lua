@@ -73,7 +73,7 @@ function _draw()
                 rectfill(inner_x2, row, cx + radius_outer_death_vignette, row, 0)
 
                 fillp()
-            end
+            end --end loop through rows
             
             draw_player()  --maybe update to a "death" pose, instead of just drawing the player?
             draw_player_hp()

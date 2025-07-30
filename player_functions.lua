@@ -200,7 +200,7 @@ function can_move()
 	tile_sp_1 = mget(tile_x1, tile_y1)
 	tile_sp_2 = mget(tile_x1, tile_y2)
 	
-	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) then
+	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) and p.x < 120 then
  	    result.right = true
     else
  	    result.right = false
@@ -210,7 +210,7 @@ function can_move()
 	tile_x1 = flr((p.x - 1)/8)
 	tile_sp_1 = mget(tile_x1, tile_y1)
 	tile_sp_2 = mget(tile_x1, tile_y2)
-	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) then
+	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) and p.x > 0 then
  	    result.left=true
     else
  	    result.left=false
@@ -222,7 +222,7 @@ function can_move()
 	tile_y1 = flr((p.y - 1)/8)
 	tile_sp_1 = mget(tile_x1, tile_y1)
 	tile_sp_2 = mget(tile_x2, tile_y1)
-	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) then
+	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) and p.y > 8 then
  	    result.up = true
     else
  	    result.up = false
@@ -232,7 +232,7 @@ function can_move()
 	tile_y1 = flr((p.y + 8)/8)
 	tile_sp_1 = mget(tile_x1, tile_y1)
 	tile_sp_2 = mget(tile_x2, tile_y1)
-	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) then
+	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) and p.y < 120 then
      	result.down = true
     else
  	    result.down = false
