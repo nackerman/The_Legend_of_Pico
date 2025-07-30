@@ -25,8 +25,13 @@ end --update_enemies()
 
 function draw_enemies()
 	for e in all(enemies) do
-		spr(e.sp, e.x, e.y)
-		
+		if not e.sword_dmg_taken then
+			--draw regular enemy sprite
+			spr(e.sp, e.x, e.y)
+		else
+			--draw enemy sprite filled with red color
+			draw_sp_mask(e.sp, e.x, e.y, false, 8)
+		end
 		--hitbox
 		if display_hitbox == true then
 			color(10)
@@ -51,15 +56,27 @@ function move_enemies()
 		--check direction to player
 		local dx = e.x - p.x
 		local dy = e.y - p.y
+		new_direction = nil
+
+		if (abs(dx) > abs(dy)) then --move in x direction
+			if sgn(dx) == 1 then
+				new_direction = "left"
+			else
+				new_direction = "right"
+			end
+		else -- move in y direction
+			if sgn(dy) == 1 then
+				new_direction = "up"
+			else
+				new_direction = "down"
+			end
+		end
 		
-		if e.id == "bat" then
-			--move towards player
-			if global_timer%npc_anim_delay == 0 then
-				if (abs(dx) > abs(dy)) then
-					e.x = e.x - sgn(dx)
-				else
-					e.y = e.y - sgn(dy)
-				end
+		if global_timer%npc_anim_delay == 0 then
+			if (abs(dx) > abs(dy)) then
+				e.x -= sgn(dx)
+			else
+				e.y -= sgn(dy)
 			end
 		end
 	end
