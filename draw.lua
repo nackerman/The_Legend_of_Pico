@@ -10,7 +10,11 @@ function _draw()
     if game_state == "game_start" then
         --clear screen, draw the map
         cls()
-        map()
+        if game_mode == "normal" then
+            map(16,0)
+        elseif game_mode == "endless_demo" then
+            map()
+        end
         
         --draw items
         draw_items()
@@ -31,10 +35,7 @@ function _draw()
             end
             
             --hud elements
-            draw_player_hp()
-            draw_rupee_ui()
-            draw_bomb_ui()
-            draw_key_ui()
+            draw_ui()
         
         else -- player is dead
             local cx = p.x + 4

@@ -31,7 +31,7 @@ function is_blocked_at(x,y)
 	--coord is a wall (sp flag 0)
 	local tile_x = flr(x/8)
 	local tile_y = flr(y/8)
-	local tile = mget(tile_x,tile_y)
+	local tile = mget(tile_x + m_offset[1], tile_y + m_offset[2])
 	
 	return fget(tile,0)
 end
@@ -247,3 +247,109 @@ function get_hitbox_at(hb_dims, x, y)
 		y2 = y + hb_dims.y2
 	}
 end
+
+function draw_ui()
+	--top bar ui
+	rectfill(0,0,127,7,0)
+	draw_player_hp()
+	draw_rupee_ui()
+	draw_bomb_ui()
+	draw_key_ui()
+	
+	--bottom bar ui
+	if game_state == "game_start" and game_mode ~= "endless_demo" then
+		rectfill(0, 120, 127, 127, 0)
+	end
+end
+--start of a* pathing functions (tile based pathing, pixel based movment)
+--full transparency, this section is basically straight from chatGPT.
+--no sense reinventing the wheel.
+function is_walkable(tx,ty)
+	--return false if out of bounds of the screen
+	if tx < 0 or tx > 15 or ty < 0 or ty > 15 then
+		return false
+	end
+	
+	return not fget(mget(tx + m_offset[1], ty + m_offset[2]), 0) -- check flag 0 of tile sprite
+end
+
+function heuristic(a,b) --manhattan distance
+	return abs(a.x - b.x) + abs (a.y - b.y)
+end
+
+function get_neighbors(node)
+	--get walkable neighbor tiles for a given node
+	local dirs = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} }
+	local result = {}
+
+	for d in all(dirs) do
+		local nx = node.x + d[1]
+		local ny = node.y + d[2]
+
+		if is_walkable(nx, ny) then
+			add(result, { x = nx, y = ny })
+		end
+	end
+	
+	return result
+end
+
+function get_tile_key(x,y)
+	return x .. "," .. y
+end
+
+function a_star()
+	local open, closed = {}, {}
+	local start_key = get_tile_key(start.x, start.y)
+	
+	open[start_key] = {
+		x=start.x, y=start.y, g=0, h=heuristic(start, goal), f=0,
+		parent=nil
+	}
+	open[start_key].f = open[start_key].g + open[start_key].h
+
+	while true do
+		local current_key, current = nil, nil
+
+		-- find node in open with lowest f
+		for k, node in pairs(open) do
+			if not current or node.f < current.f then
+				current_key, current = k, node
+			end
+		end
+
+		if not current then return nil end -- no path
+		if current.x == goal.x and current.y == goal.y then
+			-- reconstruct path
+			local path = {}
+			while current do
+				add(path, 1, {x=current.x, y=current.y})
+				current = current.parent
+			end
+			return path
+		end
+
+		open[current_key] = nil
+		closed[current_key] = true
+
+		for neighbor_pos in all(get_neighbors(current)) do
+			local key = get_tile_key(neighbor_pos.x, neighbor_pos.y)
+			if closed[key] then goto continue end
+
+			local g = current.g + 1
+			local h = heuristic(neighbor_pos, goal)
+			local f = g + h
+
+			local existing = open[key]
+			if not existing or g < existing.g then
+				open[key] = {
+					x=neighbor_pos.x, y=neighbor_pos.y,
+					g=g, h=h, f=f,
+					parent=current
+				}
+			end
+			::continue::
+		end
+	end
+end
+--end of a* pathing functions

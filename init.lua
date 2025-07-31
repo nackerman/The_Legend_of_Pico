@@ -10,9 +10,15 @@ function _init()
     display_hitbox = false
     
     --initialize game state and global timer
-    game_mode = "endless_demo"
+    game_mode = "normal" --"normal" or "endless demo"
 	game_state = "game_start"
 	global_timer = 0
+	
+	--Map offset for mget(), fget(), etc.
+	m_offset = {}
+
+	if game_mode == "endless_demo" then m_offset = {0,0}
+	elseif game_mode == "normal" then m_offset = {16,0} end
 
 	--player variables
 	p = {
@@ -37,17 +43,17 @@ function _init()
 		att_hb,                     --sword hitbox
 		hp = 3,	                    --current hp
 		hp_max = 3,	                --current max hp
-		hp_true_max = 10,             --total max with upgrades (hp can never surpass this)
-		hp_sp_full = 192,             --full heart
-		hp_sp_half = 193,	            --half heart
-		hp_sp_empty = 194,            --empty heart
-		hp_sp_array = {},	            --sp,x,y
-		hb = {},                      --hitbox={x1,y1,x2,y2}
-		i_frame_max = 15,             --total invincibility frames when hit
-		i_frame_count = 0,            --current i_frames remaining
-		rupees = 185,
+		hp_true_max = 10,           --total max with upgrades (hp can never surpass this)
+		hp_sp_full = 192,           --full heart
+		hp_sp_half = 193,	        --half heart
+		hp_sp_empty = 194,          --empty heart
+		hp_sp_array = {},	        --sp,x,y
+		hb = {},                    --hitbox={x1,y1,x2,y2}
+		i_frame_max = 15,           --total invincibility frames when hit
+		i_frame_count = 0,          --current i_frames remaining
+		rupees = 0,
 		max_rupees = 200,
-		bombs = 3,
+		bombs = 0,
 		max_bombs = 3,
 		keys = 0,
 		max_keys = 3,
