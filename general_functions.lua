@@ -31,7 +31,7 @@ function is_blocked_at(x,y)
 	--coord is a wall (sp flag 0)
 	local tile_x = flr(x/8)
 	local tile_y = flr(y/8)
-	local tile = mget(tile_x + m_offset[1], tile_y + m_offset[2])
+	local tile = mget(tile_x + m_offset_active[1], tile_y + m_offset_active[2])
 	
 	return fget(tile,0)
 end
@@ -270,7 +270,7 @@ function is_walkable(tx,ty)
 		return false
 	end
 	
-	return not fget(mget(tx + m_offset[1], ty + m_offset[2]), 0) -- check flag 0 of tile sprite
+	return not fget(mget(tx + m_offset_active[1], ty + m_offset_active[2]), 0) -- check flag 0 of tile sprite
 end
 
 function heuristic(a,b) --manhattan distance
@@ -353,3 +353,10 @@ function a_star()
 	end
 end
 --end of a* pathing functions
+
+function setup_room(offset)
+	--left door
+	--right door
+	--up door
+	--down door
+end

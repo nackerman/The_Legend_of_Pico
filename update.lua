@@ -30,6 +30,7 @@ function _update()
             deploy_bomb()
             calc_hp_sprites()
             collect_item()
+            setup_room()
             
             if game_mode == "endless_demo" then
                 spawn_enemies_endless() --"endless mode" demo
@@ -42,6 +43,9 @@ function _update()
             if time() > 0.2 then
                 --play_song_of_healing()
             end
+            
+            -- testing with mset()
+            --mset(0 + m_offset_active[1], 7 + m_offset_active[2],72)
 
         else -- player is dead
         

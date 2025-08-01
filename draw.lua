@@ -81,4 +81,8 @@ function _draw()
 
         end --is_player_dead()
     end -- game_start
+
+    if display_cpu_usage then
+        print("cpu: "..flr(stat(1)*100).."%", 1, 121, 7)
+    end
 end--end _draw()

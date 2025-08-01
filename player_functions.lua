@@ -197,8 +197,8 @@ function can_move()
 	tile_x1 = flr((p.x + 8)/8)
 	tile_y1 = flr(p.y/8)
 	tile_y2 = flr((p.y + 7)/8)
-	tile_sp_1 = mget(tile_x1 + m_offset[1], tile_y1 + m_offset[2])
-	tile_sp_2 = mget(tile_x1 + m_offset[1], tile_y2 + m_offset[2])
+	tile_sp_1 = mget(tile_x1 + m_offset_active[1], tile_y1 + m_offset_active[2])
+	tile_sp_2 = mget(tile_x1 + m_offset_active[1], tile_y2 + m_offset_active[2])
 	
 	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) and p.x < 120 then
  	    result.right = true
@@ -208,8 +208,8 @@ function can_move()
 	
 	--check tile to the left
 	tile_x1 = flr((p.x - 1)/8)
-	tile_sp_1 = mget(tile_x1 + m_offset[1], tile_y1 + m_offset[2])
-	tile_sp_2 = mget(tile_x1 + m_offset[1], tile_y2 + m_offset[2])
+	tile_sp_1 = mget(tile_x1 + m_offset_active[1], tile_y1 + m_offset_active[2])
+	tile_sp_2 = mget(tile_x1 + m_offset_active[1], tile_y2 + m_offset_active[2])
 	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) and p.x > 0 then
  	    result.left=true
     else
@@ -220,8 +220,8 @@ function can_move()
 	tile_x1 = flr(p.x/8)
 	tile_x2 = flr((p.x + 7)/8)
 	tile_y1 = flr((p.y - 1)/8)
-	tile_sp_1 = mget(tile_x1 + m_offset[1], tile_y1 + m_offset[2])
-	tile_sp_2 = mget(tile_x2 + m_offset[1], tile_y1 + m_offset[2])
+	tile_sp_1 = mget(tile_x1 + m_offset_active[1], tile_y1 + m_offset_active[2])
+	tile_sp_2 = mget(tile_x2 + m_offset_active[1], tile_y1 + m_offset_active[2])
 	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) and p.y > 8 then
  	    result.up = true
     else
@@ -230,8 +230,8 @@ function can_move()
 	
 	--check tile down
 	tile_y1 = flr((p.y + 8)/8)
-	tile_sp_1 = mget(tile_x1 + m_offset[1], tile_y1 + m_offset[2])
-	tile_sp_2 = mget(tile_x2 + m_offset[1], tile_y1 + m_offset[2])
+	tile_sp_1 = mget(tile_x1 + m_offset_active[1], tile_y1 + m_offset_active[2])
+	tile_sp_2 = mget(tile_x2 + m_offset_active[1], tile_y1 + m_offset_active[2])
 	if not fget(tile_sp_1, 0) and not fget(tile_sp_2, 0) and p.y < 120 then
      	result.down = true
     else

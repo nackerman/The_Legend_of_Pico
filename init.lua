@@ -8,17 +8,16 @@
 function _init()
     --debug
     display_hitbox = false
-    
+    display_cpu_usage = true
+
     --initialize game state and global timer
     game_mode = "normal" --"normal" or "endless demo"
+	--game_mode = "endless_demo"
 	game_state = "game_start"
 	global_timer = 0
 	
-	--Map offset for mget(), fget(), etc.
-	m_offset = {}
-
-	if game_mode == "endless_demo" then m_offset = {0,0}
-	elseif game_mode == "normal" then m_offset = {16,0} end
+	if game_mode == "endless_demo" then m_offset_active = {0,0}
+	elseif game_mode == "normal" then m_offset_active = {16,0} end
 
 	--player variables
 	p = {
@@ -221,6 +220,165 @@ function _init()
 			x2 = 7,
 			y2 = 7
 		}
+	}
+
+
+	--Map offset for mget(), fget(), etc.
+	m_offset_template = {16,1}		--for the template room
+	m_offset_active = {32,1} 	--for actively drawn room
+	m_offset_next = {48,1}		--for the next room to be entered
+	
+
+	--reference sprite numbers for drawing doors
+	door_sp = {
+		--left, right, up, down: door pos on screen 
+			--(i.e.) "west", "east", "north", "south"
+		--t1, t2 for top sprites, b1, b2 for bottom
+		left = {
+			locked = {
+				t1 = 68,
+				t2 = 69,
+				b1 = 84,
+				b2 = 85
+			},
+			open = {
+				t1 = 72,
+				t2 = 73,
+				b1 = 88,
+				b2 = 89
+			},
+			secret_closed = {
+				t1 = 76,
+				t2 = 77,
+				b1 = 92,
+				b2 = 93
+			},
+			secret_open = {
+				t1 = 204,
+				t2 = 205,
+				b1 = 220,
+				b2 = 221
+			},
+			wall = {
+				t1 = 160,
+				t2 = 162,
+				b1 = 160,
+				b2 = 162
+			}
+		},
+		right = {
+			locked = {
+				t1 = 70,
+				t2 = 71,
+				b1 = 86,
+				b2 = 87
+			},
+			open = {
+				t1 = 74,
+				t2 = 75,
+				b1 = 90,
+				b2 = 91
+			},
+			secret_closed = {
+				t1 = 78,
+				t2 = 79,
+				b1 = 94,
+				b2 = 95
+			},
+			secret_open = {
+				t1 = 206,
+				t2 = 207,
+				b1 = 222,
+				b2 = 223
+			},
+			wall = {
+				t1 = 163,
+				t2 = 165,
+				b1 = 163,
+				b2 = 165
+			}
+		},
+		up = {
+			locked = {
+				t1 = 100,
+				t2 = 101,
+				b1 = 116,
+				b2 = 117
+			},
+			open = {
+				t1 = 104,
+				t2 = 105,
+				b1 = 120,
+				b2 = 121
+			},
+			secret_closed = {
+				t1 = 108,
+				t2 = 109,
+				b1 = 124,
+				b2 = 125
+			},
+			secret_open = {
+				t1 = 236,
+				t2 = 237,
+				b1 = 252,
+				b2 = 253
+			},
+			wall = {
+				t1 = 188,
+				t2 = 188,
+				b1 = 190,
+				b2 = 190
+			}
+		},
+		down = {
+			locked = {
+				t1 = 102,
+				t2 = 103,
+				b1 = 118,
+				b2 = 119
+			},
+			open = {
+				t1 = 106,
+				t2 = 107,
+				b1 = 122,
+				b2 = 123
+			},
+			secret_closed = {
+				t1 = 110,
+				t2 = 111,
+				b1 = 126,
+				b2 = 127
+			},
+			secret_open = {
+				t1 = 238,
+				t2 = 239,
+				b1 = 254,
+				b2 = 255
+			},
+			wall = {
+				t1 = 190,
+				t2 = 190,
+				b1 = 172,
+				b2 = 172
+			}
+		},
+	}
+
+	--room config
+	rooms = {
+		active = {
+			type = "floor_start",
+			num_keys = 1,
+			doors = {
+				left = "locked"
+				right = "wall",
+				up = "secret_closed"
+				down = "open"
+			},
+			terrain_config = {},
+			enemies = {}
+		},
+		next = {},
 	}
 
 	--music
