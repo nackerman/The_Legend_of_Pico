@@ -27,29 +27,21 @@ function intro_screen_draw()
 end
 
 function is_blocked_at(x,y)
-	--check if a specific x,y
-	--coord is a wall (sp flag 0)
 	local tile_x = flr(x/8)
 	local tile_y = flr(y/8)
 	local tile = mget(tile_x + m_offset_active[1], tile_y + m_offset_active[2])
-	
 	return fget(tile,0)
 end
 
---interpret the directional btns
 function update_dir_input()
     for input, id in pairs(dir.btns) do
-		--update currently held btns
 		if btn(id) then
 			dir.held[input] = true
-			--check if just pressed
 			if not dir.prev_held[input] then
 				dir.priority[input] = time()
 			end
 		else
 			dir.held[input] = false
-			--clear time stamp if button 
-			--is no longer pressed
 			dir.priority[input] =- 1
 		end
 		dir.prev_held[input] = dir.held[input]
@@ -127,19 +119,16 @@ function draw_key_ui()
 end
 
 function draw_sp_mask(sp, dx, dy, f, mask_color)
-	--dx,dy	= draw position of sp
 	local sx = (sp%16)*8
 	local sy = flr(sp/16)*8
 	
 	for x = 0, 7 do
-		--is sp flipped?
 		local xf = x
 		if f then
 			xf = 7-x
 		end
 		
 		for y = 0,7 do
-			--c = color
 			local c = sget(sx + xf, sy + y)
 			if c ~= 0 then
 				pset(dx+x, dy+y, mask_color)
@@ -217,8 +206,7 @@ end
 function get_circle_bounds_at_y(y, cx, cy, r)
 	local x1 = -1
 	local x2 = -1
-	
-	-- Only check if the row falls within the circle to begin with
+
 	if (y - cy)*(y - cy) <= r*r then
 		local dx = sqrt(r*r - (y - cy)*(y - cy))
 		x1 = cx - dx
@@ -241,20 +229,20 @@ function get_hitbox_at(hb_dims, x, y)
 end
 
 function draw_ui()
-	--top bar ui
+	--top ui
 	rectfill(0,0,127,7,0)
 	draw_player_hp()
 	draw_rupee_ui()
 	draw_bomb_ui()
 	draw_key_ui()
 	
-	--bottom bar ui
+	--bottom ui
 	if game_state == "game_start" and game_mode ~= "endless_demo" then
 		rectfill(0, 120, 127, 127, 0)
 	end
 end
 
---start a* functions
+--start a*
 function is_walkable(tx,ty)
 	--return false if out of bounds of the screen
 	if tx < 0 or tx > 15 or ty < 0 or ty > 15 then
@@ -346,7 +334,6 @@ end
 --end of a* pathing functions
 
 function set_active_room_from_template(offset, room_def)
-	-- transfer template to active
 	for i = 0, 15 do
 		for j = 0, 15 do
 			local t = mget(i + m_offset_template[1], j + m_offset_template[2])

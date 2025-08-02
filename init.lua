@@ -6,11 +6,9 @@
 --**********************************
 	
 function _init()
-    --debug
     display_hitbox = false
     display_cpu_usage = true
 
-    --initialize game state and global timer
     game_mode = "normal" --"normal" or "endless demo"
 	--game_mode = "endless_demo"
 	game_state = "game_start"
@@ -19,7 +17,6 @@ function _init()
 	if game_mode == "endless_demo" then m_offset_active = {0,0}
 	elseif game_mode == "normal" then m_offset_active = {16,0} end
 
-	--player variables
 	p = {
 		sp = 1,
 		f = false,
@@ -30,7 +27,7 @@ function _init()
 		att_sp = 48,
 		att_x,
 		att_y,
-		att_f,                      --attack sprite flip
+		att_f,
 		spd = 1,
 		dir = "right",
 		att = false,
@@ -39,17 +36,17 @@ function _init()
 		att_delay = 5,
 		att_delay_count = 0,
 		att_held_prev = false,
-		att_hb,                     --sword hitbox
-		hp = 3,	                    --current hp
-		hp_max = 3,	                --current max hp
-		hp_true_max = 10,           --total max with upgrades (hp can never surpass this)
-		hp_sp_full = 192,           --full heart
-		hp_sp_half = 193,	        --half heart
-		hp_sp_empty = 194,          --empty heart
-		hp_sp_array = {},	        --sp,x,y
+		att_hb,
+		hp = 3,
+		hp_max = 3,
+		hp_true_max = 10,
+		hp_sp_full = 192,
+		hp_sp_half = 193,
+		hp_sp_empty = 194,
+		hp_sp_array = {},
 		hb = {},                    --hitbox={x1,y1,x2,y2}
-		i_frame_max = 15,           --total invincibility frames when hit
-		i_frame_count = 0,          --current i_frames remaining
+		i_frame_max = 15,
+		i_frame_count = 0,
 		rupees = 0,
 		max_rupees = 200,
 		bombs = 0,
@@ -62,37 +59,30 @@ function _init()
 	
 	--directional buttons
 	dir = {
-	    --definitions
 		btns = {
 			["left"]    = 0,
 			["right"]   = 1,
 			["up"]      = 2,
 			["down"]    = 3
 		},
-		
-        --used for picking direction if multiple dir btns held
 		priority = {
 			["left"]    = -1,
 			["right"]   = -1,
 			["up"]      = -1,
 			["down"]    = -1
 		},
-		
-        --dir buttons currently held
 		held = {
 			["left"]    = false,
 			["right"]   = false,
 			["up"]      = false,
 			["down"]    = false
 		},
-		--dir buttons previously held
 		prev_held = {
 			["left"]    = false,
 			["right"]   = false,
 			["up"]      = false,
 			["down"]    = false
 		},
-		--directional vectors - currently used in move_enemies()
 		vec = {
 			left = 	{ -1, 0 },
 			right = { 1, 0 },
@@ -111,11 +101,10 @@ function _init()
 	bomb_timer_start = 60
 	bomb_timer = 0
 	bomb_explode = false
-	bomb_explode_r = 10   --radius
+	bomb_explode_r = 10
 	bomb_explode_time = 0
 	bomb_explode_time_start = 30
 	
-	--item variables
 	items = {} --{id,sp,x,y}
 
 	rupee_val = {
@@ -124,7 +113,7 @@ function _init()
 		rp_r = 20
 	}
 	
-	bomb_coord = {} --x,y
+	bomb_coord = {}
 
 	--enemy variables
 	enemies = {} 
@@ -146,7 +135,6 @@ function _init()
 	npc_anim_timer = 0
 	npc_anim_delay = 6
 	
-	--useful for spawning in a random enemy type
 	enemy_type_def = {
 		{	--bat
 			key = 1, 
@@ -160,7 +148,6 @@ function _init()
 				y2 = 3
 			}
 		},
-		
 		{	--slime
 			key = 3,
 			id = "slime",
@@ -187,9 +174,6 @@ function _init()
 		},
 	}
 
-	--hitbox dimension definitions
-	--{x1,y1,x2,y2}
-	--coords relative to sp x,y
 	hb_dims = {
 		bat = {
 			x1 = 1,
@@ -204,16 +188,13 @@ function _init()
 			x2 = 6,
 			y2 = 6
 		},
-		
-		--this is for picking up the
-		--item, not for the explosion
-		bomb = {
+
+		bomb = { --item, not active bomb or explosion
 			x1 = 0,
 			y1 = 2,
 			x2 = 4,
 			y2 = 6
 		},
-		
 		key = {
 			x1 = 0,
 			y1 = 0,
@@ -222,13 +203,10 @@ function _init()
 		}
 	}
 
-
-	--Map offset for mget(), fget(), etc.
 	m_offset_template = {16,0}
 	m_offset_active = {32,0}
 	m_offset_next = {48,0}
 	
-	--door tiles to draw to (relative to offset)
 	door_tile_loc = {
 		left = {
 			t1 = {0, 7},
@@ -256,11 +234,7 @@ function _init()
 		}
 	}
 
-	--reference sprite numbers for drawing doors
 	door_sp = {
-		--left, right, up, down: door pos on screen 
-			--(i.e.) "west", "east", "north", "south"
-		--t1, t2 for top sprites, b1, b2 for bottom
 		left = {
 			locked = {
 				t1 = 68,
@@ -391,7 +365,6 @@ function _init()
 		},
 	}
 
-	--room defs (procedurally generated)
 	room_defs = {
 		["0,0"] = {
 			type = "floor_start",
@@ -417,8 +390,6 @@ function _init()
 		track2 = {38, 38, 39, 39, 40, 41, 40, 42},
 	}
 
-
-	--death screen vignette
 	radius_outer_death_vignette = 110
 	radius_inner_death_vignette = 90
 	radius_outer_death_vignette_min = 30

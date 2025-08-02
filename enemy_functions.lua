@@ -1,14 +1,12 @@
 function update_enemies()
 	for e in all(enemies) do
-		--update current hitbox positon
+		local sp_base
+
 		e.hb_cur.x1 = e.x + e.hb_dims.x1
 		e.hb_cur.y1 = e.y + e.hb_dims.y1 
 		e.hb_cur.x2 = e.x + e.hb_dims.x2
 		e.hb_cur.y2 = e.y + e.hb_dims.y2
 
-		--update animations
-		local sp_base
-		
 		if e.id == "bat" then
 			sp_base = enemy_type_def[1].sp
 		end
@@ -20,25 +18,22 @@ function update_enemies()
 		end
 
 		e.sp = sp_base + npc_anim_timer%2
-	end --for e in all enemies
-end --update_enemies()
+	end
+end
 
 function draw_enemies()
 	for e in all(enemies) do
 		if not e.sword_dmg_taken and not e.bomb_dmg_taken then
-			--draw regular enemy sprite
 			spr(e.sp, e.x, e.y)
 		else
-			--draw enemy sprite filled with red color
 			draw_sp_mask(e.sp, e.x, e.y, false, 8)
 		end
-		--hitbox
 		if display_hitbox == true then
 			color(10)
 			rect(e.hb_cur.x1, e.hb_cur.y1, e.hb_cur.x2, e.hb_cur.y2)
-		end --bat hitbox
-	end -- for e in all enemies
-end --draw_enemies()
+		end
+	end
+end
 
 function enemy_take_bomb_dmg()
 	if bomb_explode then
@@ -56,10 +51,8 @@ end
 
 function move_enemies()
 	for e in all(enemies) do
-		--check direction to player
 		local dx_p = e.x - p.x --delta x to player
 		local dy_p = e.y - p.y -- delta y to player
-		--local dx, dy
 		local can_move_left = true
 		local can_move_right = true
 		local can_move_up = true
@@ -80,9 +73,6 @@ function move_enemies()
 				new_direction = "down"
 			end
 		end
-		
-		-- update dx and dy based on desired new direction
-		--dx, dy = unpack(dir.vec[new_direction])
 
 		--check for collision with other enemies, prevent movement if collision would occur
 		for e1 in all(enemies) do
@@ -151,7 +141,7 @@ function move_enemies()
 		end
 	end
 
-	local reserved = {} --reserved hitboxes
+	local reserved = {}
 
 	for e in all(enemies) do
 		if reserved == nil then

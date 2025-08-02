@@ -1,29 +1,18 @@
 function player_move()
-	--input handling
 	local d = get_priority_dir()
-	
-    --basic movement vars
 	local cm = can_move()
 	local left_ok = cm.left
 	local right_ok = cm.right
 	local up_ok = cm.up
 	local down_ok = cm.down
-	
-    --soft edge variables
 	local soft_edge_px = 6      --can't be > 6
 	local soft_edge_spd = 1
-	
-	--calculate distance to nearest edge. 
-    --if sprite is perfectly within a tile, all of these should equal 0.
 	local dist_top = p.y%8
     local dist_bot = 7 - ((p.y + 7)%8)
     local dist_left = p.x%8
     local dist_right = 7 - ((p.x + 7)%8)
 	
-	--if not attacking,
-	--process move inputs
 	if not p.att then
-		--move left
 		if d == "left" then
 			p.dir = "left"
 			p.f = true
@@ -32,15 +21,10 @@ function player_move()
             if left_ok then
 				p.x -= p.spd
 			else
-				--soft corner detect & move
-				--clear top edge
 				if dist_top <= soft_edge_px and dist_top > 0 and not is_blocked_at(p.x - 1, p.y) then
-					--nudge up to clear edge
 					p.y-=1
 				end
-				--clear bottom edge
 				if dist_bot <= soft_edge_px and dist_bot > 0 and not is_blocked_at(p.x - 1, p.y + 7) then
-					--nudge down to clear edge
 					p.y += 1
 				end
 			end
@@ -53,15 +37,10 @@ function player_move()
             if right_ok then
 				p.x += p.spd
 			else
-				--soft edge detect & move
-				--clear top edge
 				if dist_top <= soft_edge_px and dist_top > 0 and not is_blocked_at(p.x + 8, p.y) then
-					--nudge up to clear edge
 					p.y -= 1
 				end
-				--clear bottom edge
 				if dist_bot <= soft_edge_px and dist_bot > 0 and not is_blocked_at(p.x + 8, p.y + 7) then
-					--nudge down to clear edge
 					p.y += 1
 				end
 			end
@@ -74,15 +53,10 @@ function player_move()
             if up_ok then
 				p.y-=p.spd
 			else
-			 --soft edge detect & move
-				--clear right edge
 				if dist_right <= soft_edge_px and dist_right > 0 and not is_blocked_at(p.x + 8, p.y - 1) then
-					--nudge rigjt
 					p.x += 1
 				end
-				--clear left edge
 				if dist_left <= soft_edge_px and dist_left > 0 and not is_blocked_at(p.x, p.y - 1) then
-					--nudge left
 					p.x -= 1
 				end
 			end
@@ -95,21 +69,15 @@ function player_move()
             if down_ok then
 			    p.y += p.spd
 			else
-			 --soft edge detect & move
-				--clear right edge
 				if dist_right <= soft_edge_px and dist_right > 0 and not is_blocked_at(p.x + 8, p.y + 8) then
-					--nudge rigjt
 					p.x += 1
 				end
-				--clear left edge
 				if dist_left <= soft_edge_px and dist_left > 0 and not is_blocked_at(p.x, p.y + 8) then
-					--nudge left
 					p.x -= 1
 				end
 			end
 		end
 		
-		--if not moving
 		if btn() == 0 then
 			if p.dir == "left" then 
 				p.sp = 1
@@ -131,11 +99,8 @@ end
 
 function player_attack()
 	if p.att_count > 0 then
-	--attack in progress
 		p.att_count -= 1
 		if p.att_count == 0 then
-			--attack finished - 
-			--start cooldown
 			p.att_delay_count = p.att_delay
 		end
 	else
@@ -145,7 +110,6 @@ function player_attack()
 		end
 	end
 	
-	--check cooldown
 	if p.att_delay_count > 0 then
 		p.att_delay_count -= 1	
 	end
@@ -242,12 +206,9 @@ function can_move()
 end --can_move()
 
 function draw_player()
-	--draw player
 	spr(p.sp, p.x, p.y, 1, 1, p.f)
 
-	--player hitbox	
 	if display_hitbox == true then
-		--take damage hitbox
 		color(14)
 		if p.dir == "right" then
 			rect(p.x + 3, p.y + 1, p.x + 5, p.y + 6)
@@ -255,17 +216,13 @@ function draw_player()
 			rect(p.x + 2, p.y + 1, p.x + 4, p.y + 6)
 		else
 			rect(p.x + 2, p.y + 1, p.x + 5, p.y + 6)
-		end--end take damage hitbox
-		--movement hitbox
+		end
 		color(12)
 		rect(p.x, p.y, p.x + 7, p.y + 7)
-	end--end player hitbox
+	end
 
-	--draw sword attack
 	if p.att == true then
 		spr(p.att_sp, p.att_x, p.att_y, 1, 1, p.att_f)
-		
-		--display att hitbox
 		if display_hitbox == true then
 			color(8)
 			if p.dir == "right" then
@@ -280,20 +237,18 @@ function draw_player()
 			if p.dir=="down" then
 				rect(p.att_x + 1, p.att_y + 2, p.att_x + 3, p.att_y + 7)
 			end
-		end--end display att hitbox
-	end--end player attack update
+		end
+	end
 end--end draw_player()
 
-function calc_hp_sprites() --calc hearts to display in the UI
+function calc_hp_sprites()
 	local sp_num = ceil(p.hp_max)
-	local xs = 1 --x start
-	local ys = 1 --y start
-	local hp_sp --sprite to draw
+	local xs = 1
+	local ys = 1
+	local hp_sp
 	
-	--clear current table data
 	p.hp_sp_coords = {}
 	
-	--add new table data
 	for i = 1, sp_num, 1 do
 		if p.hp < i and p.hp > i - 1 then
 			hp_sp = p.hp_sp_half
@@ -305,9 +260,9 @@ function calc_hp_sprites() --calc hearts to display in the UI
 		
 		add(p.hp_sp_coords, {sp = hp_sp, x = (i - 1)*6 + xs, y = ys} )
 	end
-end --calc_hp_sprites()
+end
 
-function draw_player_hp() --draw hearts in the UI
+function draw_player_hp()
 	for s in all(p.hp_sp_coords) do
 		spr(s.sp, s.x, s.y)
 	end
@@ -347,29 +302,23 @@ function get_player_att_hitbox()
 		p.att_hb.x2 += p.att_x
 		p.att_hb.y1 += p.att_y
 		p.att_hb.y2 += p.att_y
-	else --if not p.att 
+	else
 		p.att_hb = nil
-	end --end of if p.att
+	end
 end
 
 function player_collision()
-	--player takes damage if
-	--collision with enemy detected
 	for e in all(enemies) do
 		if e.hb_cur ~= nil then
-			
-			--player collision with enemy
 			if collision(p.hb, e.hb_cur) then
 				if p.i_frame_count == 0 then
 					sfx(5)
 					p.hp -= 0.5
 					p.i_frame_count = p.i_frame_max				
-				end --i frame check
-			end --p collision w/ enemy
+				end
+			end
 			
-			--sword collison with enemy
 			if p.att_hb ~= nil and p.att_count == p.att_time then
-				--att_hb exists, and on first frame of attack
 				if collision(p.att_hb, e.hb_cur) and not e.sword_dmg_taken then
 					e.hp -= 1
 					e.sword_dmg_taken = true
@@ -382,17 +331,15 @@ function player_collision()
 					end
 				end
 			end
-		end --enemy hb~=nil		
-	end --loop through enemies[]
-end --player_collision()
+		end
+	end
+end
 
 function collect_item()
 	local box
 	
 	for i in all(items) do
-		--if rupee
 		if i.id == "rp_g" or i.id=="rp_b" or i.id=="rp_r" then
-			--replace this with an extra variable in items[]?
             box = {
 				x1 = i.x + hb_dims.rupee.x1,
 				y1 = i.y + hb_dims.rupee.y1,
@@ -411,8 +358,7 @@ function collect_item()
 					del(items, i)
 				end
 			end
-		end--rupees
-		--bombs
+		end
 
 		if i.id == "bomb" then
 			box = {
@@ -429,9 +375,8 @@ function collect_item()
 					del(items, i)
 				end
 			end
-		end --bombs
+		end
 		
-        --keys
 		if i.id == "key" then
 			box = {
 				x1 = i.x + hb_dims.key.x1,
@@ -447,14 +392,14 @@ function collect_item()
 					del(items, i)
 				end
 			end
-		end --keys
-	end--loop items
+		end
+	end
 end
 
 function update_b_input()
 	b_prev_held = b_held
 	b_held = btn(4)
-end --update_b_input()
+end
 
 function deploy_bomb()
 	if not b_prev_held and b_held and not bomb_active and not bomb_explode and p.bombs > 0 then

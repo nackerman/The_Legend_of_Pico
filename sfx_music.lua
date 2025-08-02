@@ -4,17 +4,13 @@ function bomb_sfx()
 	end
 end
 
---music
 function play_song_of_healing()
-	--track 1
-		--also includes timing update
 	if stat(16) == -1 and stat(17) == -1 then
 		if soh_pos <= #soh.track1 then
 			sfx(soh.track1[soh_pos], 0)
 		end
-	end --track 1
+	end
 
-	--track 2
 	if stat(17) == -1 then
 		if soh_pos <= #soh.track1 then
 			sfx(soh.track2[soh_pos], 1)
@@ -22,5 +18,5 @@ function play_song_of_healing()
 		else
 			soh_pos = 1
 		end
-	end	--track 2
-end --song of healing
+	end
+end

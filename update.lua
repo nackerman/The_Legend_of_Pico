@@ -46,10 +46,6 @@ function _update()
             if time() > 0.2 then
                 --play_song_of_healing()
             end
-            
-            -- testing with mset()
-            --mset(0 + m_offset_active[1], 7 + m_offset_active[2],72)
-
         else -- player is dead
         
             calculate_player_death_vignettes()
