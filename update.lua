@@ -30,10 +30,13 @@ function _update()
             deploy_bomb()
             calc_hp_sprites()
             collect_item()
+            for dir in all({"left", "right", "up", "down"}) do
+	            bomb_secret_door(dir)
+            end
             
             --need to set condition to only call this when the active room is first generated
-            set_active_room_from_template()
-            set_door_tiles("0,0")
+            copy_room_tiles(m_offset_template, m_offset_active)
+            set_door_tiles("0,0", m_offset_active)
             
             if game_mode == "endless_demo" then
                 spawn_enemies_endless() --"endless mode" demo

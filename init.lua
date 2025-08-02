@@ -49,14 +49,15 @@ function _init()
 		i_frame_count = 0,
 		rupees = 0,
 		max_rupees = 200,
-		bombs = 0,
-		max_bombs = 3,
+		bombs = 10,
+		max_bombs = 10,
+		bomb_dmg_taken = false,
 		keys = 0,
 		max_keys = 3,
 		is_dead = false,
 		time_of_death
 	}
-	
+
 	--directional buttons
 	dir = {
 		btns = {
@@ -104,6 +105,7 @@ function _init()
 	bomb_explode_r = 10
 	bomb_explode_time = 0
 	bomb_explode_time_start = 30
+	door_bombed = false
 	
 	items = {} --{id,sp,x,y}
 
@@ -206,7 +208,7 @@ function _init()
 	m_offset_template = {16,0}
 	m_offset_active = {32,0}
 	m_offset_next = {48,0}
-	
+
 	door_tile_loc = {
 		left = {
 			t1 = {0, 7},
@@ -232,6 +234,13 @@ function _init()
 			b1 = {7, 13},
 			b2 = {8, 13}
 		}
+	}
+
+	door_hb = {
+		left = {x1 = 15, y1 = 56, x2 = 16, y2 = 71},
+		right = {x1 = 111, y1 = 56, x2 = 112, y2 = 71},
+		up = {x1 = 56, y1 = 31, x2 = 71, y2 = 32},
+		down = {x1 = 56, y1 = 95, x2 = 71, y2 = 96}
 	}
 
 	door_sp = {
@@ -364,7 +373,7 @@ function _init()
 			}
 		},
 	}
-
+	room_current = "0,0"
 	room_defs = {
 		["0,0"] = {
 			type = "floor_start",
@@ -372,10 +381,10 @@ function _init()
 			explored = true,
 			num_keys = 1,
 			doors = {
-				left = "locked",
+				left = "secret_closed",
 				right = "wall",
 				up = "secret_closed",
-				down = "open"
+				down = "locked"
 			},
 			terrain_config = {},
 			enemies = {}

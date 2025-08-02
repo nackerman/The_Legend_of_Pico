@@ -421,8 +421,10 @@ end
 
 function player_take_bomb_dmg()
 	if bomb_explode then
-		if hitbox_in_bomb_r(p.hb) then
+		if hitbox_in_bomb_r(p.hb) and p.i_frame_count == 0 and not p.bomb_dmg_taken then
 			p.hp -= 1
+			p.i_frame_count = p.i_frame_max
+			p.bomb_dmg_taken = true
 			sfx(5)
 		end
 	end

@@ -36,11 +36,15 @@ function _draw()
             local circ_test_x1 = circ_test.x1
             local circ_test_x2 = circ_test.x2
 
+            rectfill(0,0,127,7,0)
+           	if game_state == "game_start" and game_mode ~= "endless_demo" then
+		        rectfill(0, 120, 127, 127, 0)
+	        end
+            
             rectfill(0, 0, circ_test_x1, 127, 0)
             rectfill(circ_test_x2, 0, 127, 127, 0)
             rectfill(0, 0, 127, cy - radius_outer_death_vignette, 0)
             rectfill(0, 127, 127, cy + radius_outer_death_vignette, 0)
-            fillp()
 
             for row = (cy - radius_outer_death_vignette), (cy + radius_outer_death_vignette) do
                 local inner_bounds = get_circle_bounds_at_y(row, cx, cy, radius_inner_death_vignette)

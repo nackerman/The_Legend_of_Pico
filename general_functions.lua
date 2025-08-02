@@ -173,9 +173,11 @@ function update_active_bomb()
 		if bomb_explode_time == 0 then
 			bomb_explode = false
 			bomb_coord = {}
+			p.bomb_dmg_taken = false
 			for e in all(enemies) do
 				e.bomb_dmg_taken = false
 			end
+			door_bombed = false
 		end
 	end
 end
@@ -333,21 +335,21 @@ function a_star()
 end
 --end of a* pathing functions
 
-function set_active_room_from_template(offset, room_def)
+function copy_room_tiles(offset_tx, offset_rx)
 	for i = 0, 15 do
 		for j = 0, 15 do
-			local t = mget(i + m_offset_template[1], j + m_offset_template[2])
-			mset(i + m_offset_active[1], j + m_offset_active[2], t)
+			local t = mget(i + offset_tx[1], j + offset_tx[2])
+			mset(i + offset_rx[1], j + offset_rx[2], t)
 		end
 	end
 end
 
-function set_door_tiles(room_id)
+function set_door_tiles(room_id, m_offset)
 	--room_id is a string coordinate, i.e., "0,0"
 	--dungeon grid coord from proc gen, not map or sprite coord
 	local room = room_defs[room_id]
-	local offset_x = m_offset_active[1]
-	local offset_y = m_offset_active[2]
+	local offset_x = m_offset[1]
+	local offset_y = m_offset[2]
 
 	for dir, state in pairs(room.doors) do
 		local tile_pos = door_tile_loc[dir]
@@ -360,5 +362,20 @@ function set_door_tiles(room_id)
 		--bottom row
 		mset(offset_x + tile_pos.b1[1], offset_y + tile_pos.b1[2], sp.b1)
 		mset(offset_x + tile_pos.b2[1], offset_y + tile_pos.b2[2], sp.b2)
+	end
+end
+
+function bomb_secret_door(dir)
+	if bomb_explode then
+		if room_defs[room_current].doors[dir] == "secret_closed" then
+			for i = door_hb[dir].x1, door_hb[dir].x2 do
+				for j = door_hb[dir].y1, door_hb[dir].y2 do
+					if is_in_circle(i, j, bomb_coord.x, bomb_coord.y, bomb_explode_r) then
+						room_defs[room_current].doors[dir] = "secret_open"
+						door_bombed = true
+					end
+				end
+			end
+		end
 	end
 end
