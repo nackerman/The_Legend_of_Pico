@@ -30,7 +30,10 @@ function _update()
             deploy_bomb()
             calc_hp_sprites()
             collect_item()
-            setup_room()
+            
+            --need to set condition to only call this when the active room is first generated
+            set_active_room_from_template()
+            set_door_tiles("0,0")
             
             if game_mode == "endless_demo" then
                 spawn_enemies_endless() --"endless mode" demo

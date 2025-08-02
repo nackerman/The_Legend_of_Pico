@@ -224,10 +224,37 @@ function _init()
 
 
 	--Map offset for mget(), fget(), etc.
-	m_offset_template = {16,1}		--for the template room
-	m_offset_active = {32,1} 	--for actively drawn room
-	m_offset_next = {48,1}		--for the next room to be entered
+	m_offset_template = {16,0}
+	m_offset_active = {32,0}
+	m_offset_next = {48,0}
 	
+	--door tiles to draw to (relative to offset)
+	door_tile_loc = {
+		left = {
+			t1 = {0, 7},
+			t2 = {1, 7},
+			b1 = {0, 8},
+			b2 = {1, 8}
+		},
+		right = {
+			t1 = {14, 7},
+			t2 = {15, 7},
+			b1 = {14, 8},
+			b2 = {15, 8}
+		},
+		up = {
+			t1 = {7, 2},
+			t2 = {8, 2},
+			b1 = {7, 3},
+			b2 = {8, 3}
+		},
+		down = {
+			t1 = {7, 12},
+			t2 = {8, 12},
+			b1 = {7, 13},
+			b2 = {8, 13}
+		}
+	}
 
 	--reference sprite numbers for drawing doors
 	door_sp = {
@@ -364,21 +391,22 @@ function _init()
 		},
 	}
 
-	--room config
-	rooms = {
-		active = {
+	--room defs (procedurally generated)
+	room_defs = {
+		["0,0"] = {
 			type = "floor_start",
+			status = "active",
+			explored = true,
 			num_keys = 1,
 			doors = {
-				left = "locked"
+				left = "locked",
 				right = "wall",
-				up = "secret_closed"
+				up = "secret_closed",
 				down = "open"
 			},
 			terrain_config = {},
 			enemies = {}
-		},
-		next = {},
+		}
 	}
 
 	--music
@@ -395,32 +423,4 @@ function _init()
 	radius_inner_death_vignette = 90
 	radius_outer_death_vignette_min = 30
 	radius_inner_death_vignette_min = 12
-	
-	--add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
-	--spawn some bats for testing
-	--add(enemies, {id = "bat", sp = 64, x = 38, y = 38, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
-	--add(enemies, {id = "bat", sp = 65, x = 32, y = 32, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
-	--add(enemies, {id = "bat", sp = 64, x = 20, y = 40, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
-	--add(enemies, {id = "bat", sp = 64, x = 80, y = 50, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )	
-	--add(enemies, {id = "bat", sp = 65, x = 90, y = 60, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
-	--add(enemies, {id = "bat", sp = 64, x = 80, y = 60, hp = 1, hb_dims = enemy_type_def[1].hb_dims, hb_cur = {} } )
-
-	--spawn some rupees for testing
-	--add(items, {id = "rp_g", sp = 240, x = 20, y = 30} )
-	--add(items, {id = "rp_g", sp = 240, x = 35, y = 50} )
-	--add(items, {id = "rp_b", sp = 241, x = 37, y = 60} )
-	--add(items, {id = "rp_r", sp = 242, x = 40, y = 70} )
-	
-	--spawn bombs for testing
-	--add(items, {id = "bomb", sp = 224, x = 5, y = 10} )
-	--add(items, {id = "bomb", sp = 224, x = 80, y = 80} )
-	--add(items, {id = "bomb", sp = 224, x = 5, y = 20} )
-	--add(items, {id = "bomb", sp = 224, x = 80, y = 90} )
-	--add(items, {id = "bomb", sp = 224, x = 16, y = 10} )
-	--add(items, {id = "bomb", sp = 224, x = 70, y = 80} )
-	--spawn bombs for testing
-	--add(items, {id = "key", sp = 243, x = 30, y = 15} )
-	--add(items, {id = "key", sp = 243, x = 75, y = 90} )
-	--add(items, {id = "key", sp = 243, x = 40, y = 15} )
-	--add(items, {id = "key", sp = 243, x = 85, y = 90} )
 end --end init

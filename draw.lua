@@ -11,7 +11,7 @@ function _draw()
         --clear screen, draw the map
         cls()
         if game_mode == "normal" then
-            map(16,0)
+            map(m_offset_active[1], m_offset_active[2])
         elseif game_mode == "endless_demo" then
             map()
         end

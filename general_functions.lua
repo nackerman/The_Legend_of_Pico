@@ -84,18 +84,13 @@ function check_att_input()
 end
 
 function collision(h1, h2)
-	--inclusive collision
-	--h1,h2={x1,y1,x2,y2}
-	--note: player collision with
-	--walls is handled elsewhere
-
 	return not (
 		h1.x2<h2.x1 or
 		h1.x1>h2.x2 or
 		h1.y2<h2.y1 or
 		h1.y1>h2.y2
 	)
-end --collision()
+end
 
 function draw_rupee_ui()
 	local x = #(tostr(p.rupees))
@@ -203,9 +198,6 @@ function draw_bomb_explode()
 end
 
 function is_in_circle(x, y, cx, cy, r)
-	--x,y=point to be tested
-	--cx,cy=center of circ
-	--r=rad of circ
 	local dx = x - cx
 	local dy = y - cy
 	
@@ -261,9 +253,8 @@ function draw_ui()
 		rectfill(0, 120, 127, 127, 0)
 	end
 end
---start of a* pathing functions (tile based pathing, pixel based movment)
---full transparency, this section is basically straight from chatGPT.
---no sense reinventing the wheel.
+
+--start a* functions
 function is_walkable(tx,ty)
 	--return false if out of bounds of the screen
 	if tx < 0 or tx > 15 or ty < 0 or ty > 15 then
@@ -354,9 +345,33 @@ function a_star()
 end
 --end of a* pathing functions
 
-function setup_room(offset)
-	--left door
-	--right door
-	--up door
-	--down door
+function set_active_room_from_template(offset, room_def)
+	-- transfer template to active
+	for i = 0, 15 do
+		for j = 0, 15 do
+			local t = mget(i + m_offset_template[1], j + m_offset_template[2])
+			mset(i + m_offset_active[1], j + m_offset_active[2], t)
+		end
+	end
+end
+
+function set_door_tiles(room_id)
+	--room_id is a string coordinate, i.e., "0,0"
+	--dungeon grid coord from proc gen, not map or sprite coord
+	local room = room_defs[room_id]
+	local offset_x = m_offset_active[1]
+	local offset_y = m_offset_active[2]
+
+	for dir, state in pairs(room.doors) do
+		local tile_pos = door_tile_loc[dir]
+		local sp = door_sp[dir][state]
+
+		--top row
+		mset(offset_x + tile_pos.t1[1], offset_y + tile_pos.t1[2], sp.t1)
+		mset(offset_x + tile_pos.t2[1], offset_y + tile_pos.t2[2], sp.t2)
+		
+		--bottom row
+		mset(offset_x + tile_pos.b1[1], offset_y + tile_pos.b1[2], sp.b1)
+		mset(offset_x + tile_pos.b2[1], offset_y + tile_pos.b2[2], sp.b2)
+	end
 end
