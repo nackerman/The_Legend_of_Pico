@@ -106,7 +106,7 @@ function draw_bomb_ui()
 	if p.bombs == p.max_bombs then
 		color(11)
 	end
-	print("⁙"..p.bombs, 93, 1)
+	print("⁙"..p.bombs, 94, 1)
 end
 
 function draw_key_ui()
@@ -388,5 +388,29 @@ function bomb_secret_door(dir)
 				end
 			end
 		end
+	end
+end
+
+function scroll_screen()
+	local hb = door_scroll_hb[p.dir]
+	local align = door_align[p.dir]
+	local pa = p[align.axis]		--player alignment info
+	local da = hb[align.axis.."1"]  --door alignment coord (i.e., "x1", "y1", "x2", or "y2")
+
+	if collision({x1=p.x, y1=p.y, x2=p.x+7, y2=p.y+7}, hb) and btn(dir.btns[p.dir]) then
+		test = p.dir
+
+		if pa == da then
+			p.is_aligned_with_door = p.dir
+		else
+			p.is_aligned_with_door = "none"
+			if pa < da then
+				p[align.axis] += 1
+			elseif pa > da then
+				p[align.axis] -= 1
+			end
+		end
+	else
+		test = "false"
 	end
 end

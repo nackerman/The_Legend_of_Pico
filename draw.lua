@@ -69,4 +69,23 @@ function _draw()
     if display_cpu_usage then
         print("cpu: "..flr(stat(1)*100).."%", 1, 121, 7)
     end
+
+    --debugging and testing
+    --    for dir, hb in pairs(door_scroll_hb) do
+    --        if test == dir then
+    --            if p.is_aligned_with_door == dir then
+    --                rect(hb.x1, hb.y1, hb.x2, hb.y2, 11)
+    --            else
+    --                rect(hb.x1, hb.y1, hb.x2, hb.y2, 9)
+    --            end
+    --        else
+    --            rect(hb.x1, hb.y1, hb.x2, hb.y2, 7)
+    --        end
+    --    end
+
+        --print("init scroll: " .. test, 50, 121, 7)
+        --print("p.dir: " .. p.dir, 10, 10, 11)
+        --print("p.y: " .. p.y)
+        --print("left door hb y1: " .. door_scroll_hb["left"].y1)
+    --end debug and test
 end

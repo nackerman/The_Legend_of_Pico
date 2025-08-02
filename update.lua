@@ -49,6 +49,8 @@ function _update()
             if time() > 0.2 then
                 --play_song_of_healing()
             end
+
+            scroll_screen()
         else -- player is dead
         
             calculate_player_death_vignettes()

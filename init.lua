@@ -37,7 +37,7 @@ function _init()
 		att_delay_count = 0,
 		att_held_prev = false,
 		att_hb,
-		hp = 0.5,
+		hp = 3,
 		hp_max = 3,
 		hp_true_max = 10,
 		hp_sp_full = 192,
@@ -49,11 +49,12 @@ function _init()
 		i_frame_count = 0,
 		rupees = 0,
 		max_rupees = 200,
-		bombs = 10,
-		max_bombs = 10,
+		bombs = 9,
+		max_bombs = 9,
 		bomb_dmg_taken = false,
 		keys = 0,
 		max_keys = 3,
+		is_aligned_with_door = "none",
 		is_dead = false,
 		time_of_death
 	}
@@ -244,6 +245,20 @@ function _init()
 		down = {x1 = 56, y1 = 95, x2 = 71, y2 = 96}
 	}
 
+	door_scroll_hb = {
+		left = {x1 = 15, y1 = 60, x2 = 16, y2 = 67},
+		right = {x1 = 111, y1 = 60, x2 = 112, y2 = 67},
+		up = {x1 = 60, y1 = 31, x2 = 67, y2 = 32},
+		down = {x1 = 60, y1 = 95, x2 = 67, y2 = 96}
+	}
+
+	door_align = {
+		left  = {axis = "y", sign = 1},
+		right = {axis = "y", sign = 1},
+		up    = {axis = "x", sign = 1},
+		down  = {axis = "x", sign = 1}
+	}
+
 	door_sp = {
 		left = {
 			locked = {
@@ -378,14 +393,30 @@ function _init()
 	room_defs = {
 		["0,0"] = {
 			type = "floor_start",
-			status = "active",
+			active = true,
+			next = false,
 			explored = true,
 			num_keys = 1,
 			doors = {
-				left = "secret_closed",
-				right = "secret_closed",
-				up = "secret_closed",
-				down = "secret_closed"
+				left = "open",
+				right = "open",
+				up = "open",
+				down = "open"
+			},
+			terrain_config = {},
+			enemies = {}
+		},
+		["0,1"] ={
+			type = "floor_start",
+			active = true,
+			next = false,
+			explored = true,
+			num_keys = 1,
+			doors = {
+				left = "wall",
+				right = "open",
+				up = "wall",
+				down = "wall"
 			},
 			terrain_config = {},
 			enemies = {}
@@ -404,4 +435,10 @@ function _init()
 	radius_inner_death_vignette = 90
 	radius_outer_death_vignette_min = 30
 	radius_inner_death_vignette_min = 12
+
+
+	--testing
+	test = "false"
+	--end test
+
 end --end init
