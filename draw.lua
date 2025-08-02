@@ -32,17 +32,15 @@ function _draw()
         else -- player is dead
             local cx = p.x + 4
             local cy = p.y + 4
-            local circ_test = get_circle_bounds_at_y(cy, cx, cy, radius_outer_death_vignette)
-            local circ_test_x1 = circ_test.x1
-            local circ_test_x2 = circ_test.x2
+            local circ_bounds = get_circle_bounds_at_y(cy, cx, cy, radius_outer_death_vignette)
 
             rectfill(0,0,127,7,0)
            	if game_state == "game_start" and game_mode ~= "endless_demo" then
 		        rectfill(0, 120, 127, 127, 0)
 	        end
             
-            rectfill(0, 0, circ_test_x1, 127, 0)
-            rectfill(circ_test_x2, 0, 127, 127, 0)
+            rectfill(0, 0, circ_bounds.x1, 127, 0)
+            rectfill(circ_bounds.x2, 0, 127, 127, 0)
             rectfill(0, 0, 127, cy - radius_outer_death_vignette, 0)
             rectfill(0, 127, 127, cy + radius_outer_death_vignette, 0)
 

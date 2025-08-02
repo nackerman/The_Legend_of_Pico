@@ -146,15 +146,15 @@ end
 function draw_active_bomb()
 	if bomb_active then
 		if bomb_timer <= bomb_timer_start/5 then
-			spr(233 + global_timer%2, bomb_coord.x, bomb_coord.y)
+			spr(233 + global_timer%2, bomb_coord_sp.x, bomb_coord_sp.y)
 		elseif bomb_timer <= (bomb_timer_start/5)*2 then
-			spr(231 + global_timer%2, bomb_coord.x, bomb_coord.y)
+			spr(231 + global_timer%2, bomb_coord_sp.x, bomb_coord_sp.y)
 		elseif bomb_timer <= (bomb_timer_start/5)*3 then
-			spr(229 + global_timer%2, bomb_coord.x, bomb_coord.y)
+			spr(229 + global_timer%2, bomb_coord_sp.x, bomb_coord_sp.y)
 		elseif bomb_timer <= (bomb_timer_start/5)*4 then
-			spr(227 + global_timer%2, bomb_coord.x,	bomb_coord.y)
+			spr(227 + global_timer%2, bomb_coord_sp.x,	bomb_coord_sp.y)
 		else
-			spr(225 + global_timer%2, bomb_coord.x, bomb_coord.y)
+			spr(225 + global_timer%2, bomb_coord_sp.x, bomb_coord_sp.y)
 		end
 	end --if bomb_active
 end --draw_active_bomb()
@@ -172,7 +172,9 @@ function update_active_bomb()
 		bomb_explode_time -= 1
 		if bomb_explode_time == 0 then
 			bomb_explode = false
-			bomb_coord = {}
+			bomb_coord_center = {}
+			bomb_coord_sp = {}
+			
 			p.bomb_dmg_taken = false
 			for e in all(enemies) do
 				e.bomb_dmg_taken = false
@@ -184,7 +186,11 @@ end
 
 function draw_bomb_explode()
 	if bomb_explode then
-		circfill(bomb_coord.x + 3, bomb_coord.y + 4, bomb_explode_r, 9 + global_timer%2)
+		if not is_player_dead() then
+			circfill(bomb_coord_center.x, bomb_coord_center.y, bomb_explode_r, 9 + global_timer%2)
+		else
+			circfill(bomb_coord_center.x, bomb_coord_center.y, bomb_explode_r, 9)
+		end
 	end
 end
 
@@ -198,7 +204,7 @@ end
 function hitbox_in_bomb_r(hb_cur)	
 	for i = hb_cur.x1, hb_cur.x2 do
 		for j = hb_cur.y1, hb_cur.y2 do
-			if  is_in_circle(i, j, bomb_coord.x+3, bomb_coord.y+4, bomb_explode_r) then
+			if  is_in_circle(i, j, bomb_coord_center.x, bomb_coord_center.y, bomb_explode_r) then
 				return true
 			end
 		end
@@ -366,12 +372,17 @@ function set_door_tiles(room_id, m_offset)
 end
 
 function bomb_secret_door(dir)
-	if bomb_explode then
+	if is_player_dead() then
+		return
+	end
+
+	if bomb_explode and not door_bombed then
 		if room_defs[room_current].doors[dir] == "secret_closed" then
 			for i = door_hb[dir].x1, door_hb[dir].x2 do
 				for j = door_hb[dir].y1, door_hb[dir].y2 do
-					if is_in_circle(i, j, bomb_coord.x, bomb_coord.y, bomb_explode_r) then
+					if is_in_circle(i, j, bomb_coord_center.x, bomb_coord_center.y, bomb_explode_r) then
 						room_defs[room_current].doors[dir] = "secret_open"
+						sfx(9)
 						door_bombed = true
 					end
 				end

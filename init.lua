@@ -6,7 +6,7 @@
 --**********************************
 	
 function _init()
-    display_hitbox = false
+    display_hitbox = true
     display_cpu_usage = true
 
     game_mode = "normal" --"normal" or "endless demo"
@@ -37,7 +37,7 @@ function _init()
 		att_delay_count = 0,
 		att_held_prev = false,
 		att_hb,
-		hp = 3,
+		hp = 0.5,
 		hp_max = 3,
 		hp_true_max = 10,
 		hp_sp_full = 192,
@@ -115,7 +115,8 @@ function _init()
 		rp_r = 20
 	}
 	
-	bomb_coord = {}
+	bomb_coord_sp = { x, y }
+	bomb_coord_center = { x, y }
 
 	--enemy variables
 	enemies = {} 
@@ -382,9 +383,9 @@ function _init()
 			num_keys = 1,
 			doors = {
 				left = "secret_closed",
-				right = "wall",
+				right = "secret_closed",
 				up = "secret_closed",
-				down = "locked"
+				down = "secret_closed"
 			},
 			terrain_config = {},
 			enemies = {}

@@ -408,14 +408,15 @@ function deploy_bomb()
 		bomb_timer = bomb_timer_start
 		
         if p.dir == "left" then
-			bomb_coord = {x = p.x - 4, y = p.y + 1}
+			bomb_coord_sp = {x = p.x - 4, y = p.y + 1}
 		elseif p.dir == "right" then
-			bomb_coord = {x = p.x + 6, y = p.y + 1}
+			bomb_coord_sp = {x = p.x + 6, y = p.y + 1}
 		elseif p.dir == "up" then
-			bomb_coord = {x = p.x + 1, y = p.y - 6}
+			bomb_coord_sp = {x = p.x + 1, y = p.y - 6}
 		elseif p.dir == "down" then
-			bomb_coord = {x = p.x + 1, y = p.y + 6}
+			bomb_coord_sp = {x = p.x + 1, y = p.y + 6}
 		end
+		bomb_coord_center = { x = bomb_coord_sp.x + 3, y = bomb_coord_sp.y + 4}
 	end
 end
 
