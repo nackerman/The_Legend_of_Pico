@@ -245,9 +245,32 @@ function draw_ui()
 	draw_key_ui()
 	
 	--bottom ui
-	if game_state == "game_start" and game_mode ~= "endless_demo" then
+	if game_mode == "normal" then
 		rectfill(0, 120, 127, 127, 0)
 	end
+end
+
+function draw_vignette(cx, cy, r_outer, r_inner, fill_pattern)
+    -- corners and top/bottom bars
+    local circ_bounds = get_circle_bounds_at_y(cy, cx, cy, r_outer)
+
+    rectfill(-1, 0, circ_bounds.x1, 127, 0)
+    rectfill(circ_bounds.x2, 0, 128, 127, 0)
+    rectfill(0, 0, 127, cy - r_outer, 0)
+    rectfill(0, 127, 127, cy + r_outer, 0)
+
+    for row = (cy - r_outer), (cy + r_outer) do
+        local inner_bounds = get_circle_bounds_at_y(row, cx, cy, r_inner)
+        local outer_bounds = get_circle_bounds_at_y(row, cx, cy, r_outer)
+
+        rectfill(cx - r_outer, row, outer_bounds.x1, row, 0)
+        rectfill(outer_bounds.x2, row, cx + r_outer, row, 0)
+
+		fillp(fill_pattern)
+		rectfill(cx - r_outer, row, inner_bounds.x1, row, 0)
+		rectfill(inner_bounds.x2, row, cx + r_outer, row, 0)
+		fillp()
+    end
 end
 
 --start a*
@@ -386,7 +409,7 @@ function set_door_tiles(room_id, m_offset)
 end
 
 function bomb_secret_door(dir)
-	if is_player_dead() then
+	if is_player_dead() or game_mode == "endless_demo" then
 		return
 	end
 
@@ -398,6 +421,7 @@ function bomb_secret_door(dir)
 						room_defs[room_current].doors[dir] = "secret_open"
 						sfx(9)
 						door_bombed = true
+						active_room_configured = false
 					end
 				end
 			end
@@ -412,7 +436,7 @@ function get_next_room_id(d) --d is a direction
 	return get_tile_key(x + dx, y + dy)
 end
 
-function transition_screen()
+function check_player_in_door()
 	local hb = door_scroll_hb[p.dir]
 	local align = door_align[p.dir]
 	local pa = p[align.axis]		--player alignment info
@@ -421,9 +445,9 @@ function transition_screen()
 	if collision({x1=p.x, y1=p.y, x2=p.x+7, y2=p.y+7}, hb) 
 	and btn(dir.btns[p.dir]) and (room_defs[room_current].doors[p.dir] == "open" or 
 	room_defs[room_current].doors[p.dir] == "secret_open") then
-		test = p.dir
 
 		if pa == da then
+			room_transition = true
 			p.is_aligned_with_door = p.dir
 
 			--load template into next room
@@ -445,7 +469,6 @@ function transition_screen()
 		end
 
 	else
-		test = "false"
+		room_transition = false
 	end
-
 end

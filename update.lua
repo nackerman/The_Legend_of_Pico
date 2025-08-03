@@ -1,6 +1,7 @@
 function _update()
 	timers()
 	
+    
 	if game_state == "intro" then
 		intro_screen_update()
 				
@@ -14,7 +15,7 @@ function _update()
 	end
 	
 	if game_state == "game_start" then
-        if not is_player_dead() then
+        if not is_player_dead() and not room_transition then
             update_dir_input()
             player_move()
             move_enemies()
@@ -34,10 +35,13 @@ function _update()
 	            bomb_secret_door(dir)
             end
             
-            --need to set condition to only call this when the active room is first generated
-            copy_room_tiles(m_offset_template, m_offset_active)
-            set_door_tiles("0,0", m_offset_active)
-            
+            --setup initial room, the rest will be handled during room transitions
+            if game_mode == "normal" and not active_room_configured then
+                copy_room_tiles(m_offset_template, m_offset_active)
+                set_door_tiles(room_current, m_offset_active)
+                active_room_configured = true
+            end
+
             if game_mode == "endless_demo" then
                 spawn_enemies_endless() --"endless mode" demo
             end
@@ -50,10 +54,44 @@ function _update()
                 --play_song_of_healing()
             end
 
-            --originally intended to scroll the screen, tabling that for now in favor of a simpler approach
-            transition_screen()
+           if game_mode == "normal" then
+                check_player_in_door()
+           end
+
+        elseif room_transition then
+            active_room_configured = false
+
+            if not room_vignette_close_complete then
+                if radius_room_trans_vignette > 0 then
+                    radius_room_trans_vignette -= 10
+                else
+                    room_current = room_next
+                    copy_room_tiles(m_offset_template, m_offset_active)
+                    set_door_tiles(room_current, m_offset_active)
+                    room_vignette_close_complete = true
+                    if p.dir == "left" then
+                        p.x = 104
+                    elseif p.dir == "right" then
+                        p.x = 16
+                    elseif p.dir == "up" then
+                        p.y = 88
+                    elseif p.dir == "down" then
+                        p.y = 32
+                    end
+                end
+            elseif not room_vignette_open_complete then
+                if radius_room_trans_vignette < 120 then
+                    radius_room_trans_vignette += 10
+                else
+                    room_vignette_open_complete = true
+                end
+            else
+                room_vignette_close_complete = false
+                room_vignette_open_complete = false
+                room_transition = false
+                active_room_configured = true
+            end
         else -- player is dead
-        
             calculate_player_death_vignettes()
         end -- player is dead
 	end

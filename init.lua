@@ -6,16 +6,13 @@
 --**********************************
 	
 function _init()
-    display_hitbox = true
+    display_hitbox = false
     display_cpu_usage = true
 
     game_mode = "normal" --"normal" or "endless demo"
 	--game_mode = "endless_demo"
 	game_state = "game_start"
 	global_timer = 0
-	
-	if game_mode == "endless_demo" then m_offset_active = {0,0}
-	elseif game_mode == "normal" then m_offset_active = {16,0} end
 
 	p = {
 		sp = 1,
@@ -37,7 +34,7 @@ function _init()
 		att_delay_count = 0,
 		att_held_prev = false,
 		att_hb,
-		hp = 3,
+		hp = 0.5,
 		hp_max = 3,
 		hp_true_max = 10,
 		hp_sp_full = 192,
@@ -210,6 +207,7 @@ function _init()
 	m_offset_template = {16,0}
 	m_offset_active = {32,0}
 	m_offset_next = {48,0}
+	if game_mode == "endless_demo" then m_offset_active = {0,0} end
 
 	door_tile_loc = {
 		left = {
@@ -251,6 +249,10 @@ function _init()
 		up = {x1 = 60, y1 = 31, x2 = 67, y2 = 32},
 		down = {x1 = 60, y1 = 95, x2 = 67, y2 = 96}
 	}
+
+	if game_mode == "endless_demo" then
+		door_hb, door_scroll_hb = {}
+	end
 
 	door_align = {
 		left  = {axis = "y", sign = 1},
@@ -392,6 +394,10 @@ function _init()
 	
 	room_current = "0,0"
 	room_next = nil
+	room_transition = false
+	active_room_configured = false
+	room_vignette_close_complete = false
+	room_vignette_open_complete = false
 
 	room_defs = {
 		["0,0"] = {
@@ -402,15 +408,30 @@ function _init()
 			num_keys = 1,
 			doors = {
 				left = "open",
-				right = "secret_closed",
+				right = "wall",
 				up = "secret_closed",
-				down = "secret_closed"
+				down = "wall"
 			},
 			terrain_config = {},
 			enemies = {}
 		},
-		["-1,0"] ={
-			type = "floor_start",
+		["-1,0"] = {
+			type = "combat",
+			active = true,
+			next = false,
+			explored = true,
+			num_keys = 1,
+			doors = {
+				left = "wall",
+				right = "open",
+				up = "wall",
+				down = "wall"
+			},
+			terrain_config = {},
+			enemies = {}
+		},
+		["0,-1"] = {
+			type = "combat",
 			active = true,
 			next = false,
 			explored = true,
@@ -419,7 +440,7 @@ function _init()
 				left = "wall",
 				right = "wall",
 				up = "wall",
-				down = "wall"
+				down = "secret_open"
 			},
 			terrain_config = {},
 			enemies = {}
@@ -434,14 +455,15 @@ function _init()
 		track2 = {38, 38, 39, 39, 40, 41, 40, 42},
 	}
 
-	radius_outer_death_vignette = 110
-	radius_inner_death_vignette = 90
+	radius_outer_death_vignette = 150
+	radius_inner_death_vignette = 120
 	radius_outer_death_vignette_min = 30
 	radius_inner_death_vignette_min = 12
 
+	radius_room_trans_vignette = 120
 
 	--testing
-	test = "false"
+	--test = "false"
 	--end test
 
 end --end init
