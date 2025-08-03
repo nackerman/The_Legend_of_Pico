@@ -1,3 +1,5 @@
+--The Legend of Pico, by Nick Ackerman
+
 --**********************************
 --note regarding sprite flags:
 --f0: inhibits player move
