@@ -1,4 +1,4 @@
-# Pico-8 Zelda Procedurally Generated Roguelike Dungeon
+# The Legend of Pico - A Procedurally Generated Roguelike Dungeon Game
 
 The current build of my Pico-8 game, which is still in development.
 
@@ -67,8 +67,8 @@ The only code that the main pico-8 file (i.e., 'zelda.p8') contains consists of 
 > Built using `zelda.p8` and external scripts: `init.lua`, `update.lua`, `draw.lua`, `general_functions.lua`, `player_functions.lua`, `enemy_functions.lua`, and `sfx_music.lua`.
 
 ```
-zelda/
-├── zelda.p8                    # Main PICO-8 cart. Contains includes (as follows), art, music/sfx
+Legend_of_Pico/
+├── Legend_of_Pico.p8                    # Main PICO-8 cart. Contains includes (as follows), art, music/sfx
 ├── init.lua                    # Included at runtime - Contains Pico-8 _init() function 
 ├── update.lua                  # Included at runtime - Contains Pico-8 _update() function
 ├── draw.lua                    # Included at runtime - Contains Pico-8 _draw() function
