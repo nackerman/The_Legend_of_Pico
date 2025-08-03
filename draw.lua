@@ -55,7 +55,7 @@ function _draw()
     end
 
     if display_cpu_usage then
-        --print("cpu: "..flr(stat(1)*100).."%", 1, 121, 7)
+        print("cpu: "..flr(stat(1)*100).."%", 1, 121, 7)
     end
 
     --debugging and testing
