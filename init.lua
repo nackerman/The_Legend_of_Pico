@@ -6,12 +6,15 @@
 --**********************************
 	
 function _init()
-    display_hitbox = false
+    --debugging
+	display_hitbox = false
     display_cpu_usage = true
 
+	--game parameters
     game_mode = "normal" --"normal" or "endless demo"
 	--game_mode = "endless_demo"
 	game_state = "game_start"
+	
 	global_timer = 0
 
 	p = {
