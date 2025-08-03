@@ -52,10 +52,10 @@ In normal mode, the player spawns into a dungeon room, complete with outer walls
 
 ```
 **Keyboard Controls**
-- Arrow Keys - Move  
-- X          - Sword attack
-- Z          - Use bomb item
-- CTRL + R   - Restart game (re-run the game from initial state)
+- Arrow Keys : Move  
+- X          : Sword attack
+- Z          : Use bomb item
+- CTRL + R   : Restart game (re-run the game from initial state)
 ```
 
 ---
@@ -68,7 +68,7 @@ The only code that the main pico-8 file (i.e., 'zelda.p8') contains consists of 
 
 ```
 Legend_of_Pico/
-├── Legend_of_Pico.p8                    # Main PICO-8 cart. Contains includes (as follows), art, music/sfx
+├── Legend_of_Pico.p8           # Main PICO-8 cart. Contains includes (as follows), art, music/sfx
 ├── init.lua                    # Included at runtime - Contains Pico-8 _init() function 
 ├── update.lua                  # Included at runtime - Contains Pico-8 _update() function
 ├── draw.lua                    # Included at runtime - Contains Pico-8 _draw() function
