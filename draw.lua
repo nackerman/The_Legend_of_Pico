@@ -9,8 +9,15 @@ function _draw()
 	
     if game_state == "game_start" then
         cls()
+        camera(0,0)
+        local m_offset = m_offset_active
+
+        if test ~= "false" then
+            m_offset = m_offset_next
+        end
+
         if game_mode == "normal" then
-            map(m_offset_active[1], m_offset_active[2])
+            map(m_offset[1], m_offset[2])
         elseif game_mode == "endless_demo" then
             map()
         end
@@ -71,6 +78,7 @@ function _draw()
     end
 
     --debugging and testing
+    print()
     --    for dir, hb in pairs(door_scroll_hb) do
     --        if test == dir then
     --            if p.is_aligned_with_door == dir then

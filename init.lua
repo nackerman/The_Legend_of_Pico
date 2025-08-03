@@ -389,7 +389,10 @@ function _init()
 			}
 		},
 	}
+	
 	room_current = "0,0"
+	room_next = nil
+
 	room_defs = {
 		["0,0"] = {
 			type = "floor_start",
@@ -399,14 +402,14 @@ function _init()
 			num_keys = 1,
 			doors = {
 				left = "open",
-				right = "open",
-				up = "open",
-				down = "open"
+				right = "secret_closed",
+				up = "secret_closed",
+				down = "secret_closed"
 			},
 			terrain_config = {},
 			enemies = {}
 		},
-		["0,1"] ={
+		["-1,0"] ={
 			type = "floor_start",
 			active = true,
 			next = false,
@@ -414,7 +417,7 @@ function _init()
 			num_keys = 1,
 			doors = {
 				left = "wall",
-				right = "open",
+				right = "wall",
 				up = "wall",
 				down = "wall"
 			},

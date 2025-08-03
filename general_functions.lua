@@ -285,6 +285,20 @@ function get_tile_key(x,y)
 	return x .. "," .. y
 end
 
+function find_comma(s)
+	for i = 1, #s do
+		if sub(s, i, i) == "," then
+			return i
+		end
+	end
+	return nil
+end
+
+function get_coords_from_tile_key(key)
+    local i = find_comma(key)
+	return tonum(sub(key, 1, i - 1)), tonum(sub(key, i + 1))
+end
+
 function a_star()
 	local open, closed = {}, {}
 	local start_key = get_tile_key(start.x, start.y)
@@ -391,17 +405,36 @@ function bomb_secret_door(dir)
 	end
 end
 
-function scroll_screen()
+function get_next_room_id(d) --d is a direction
+	local x, y = get_coords_from_tile_key(room_current)
+	local dx, dy = dir.vec[d][1], dir.vec[d][2]
+	
+	return get_tile_key(x + dx, y + dy)
+end
+
+function transition_screen()
 	local hb = door_scroll_hb[p.dir]
 	local align = door_align[p.dir]
 	local pa = p[align.axis]		--player alignment info
 	local da = hb[align.axis.."1"]  --door alignment coord (i.e., "x1", "y1", "x2", or "y2")
 
-	if collision({x1=p.x, y1=p.y, x2=p.x+7, y2=p.y+7}, hb) and btn(dir.btns[p.dir]) then
+	if collision({x1=p.x, y1=p.y, x2=p.x+7, y2=p.y+7}, hb) 
+	and btn(dir.btns[p.dir]) and (room_defs[room_current].doors[p.dir] == "open" or 
+	room_defs[room_current].doors[p.dir] == "secret_open") then
 		test = p.dir
 
 		if pa == da then
 			p.is_aligned_with_door = p.dir
+
+			--load template into next room
+			copy_room_tiles(m_offset_template, m_offset_next)
+			--populate doors for next room
+			
+			room_next = get_next_room_id(p.dir)
+			set_door_tiles(room_next, m_offset_next)
+
+			--snap camera to next room
+			map(m_offset_next[1], m_offset_next[2])
 		else
 			p.is_aligned_with_door = "none"
 			if pa < da then
@@ -410,7 +443,9 @@ function scroll_screen()
 				p[align.axis] -= 1
 			end
 		end
+
 	else
 		test = "false"
 	end
+
 end

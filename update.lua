@@ -50,7 +50,8 @@ function _update()
                 --play_song_of_healing()
             end
 
-            scroll_screen()
+            --originally intended to scroll the screen, tabling that for now in favor of a simpler approach
+            transition_screen()
         else -- player is dead
         
             calculate_player_death_vignettes()
