@@ -6,7 +6,7 @@
 --f1: damage player on contact
 --f2: player can collect item
 --**********************************
-	
+
 function _init()
     --debugging
 	display_hitbox = false
