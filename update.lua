@@ -64,6 +64,9 @@ function _update()
             if not room_vignette_close_complete then
                 if radius_room_trans_vignette > 0 then
                     radius_room_trans_vignette -= 10
+                    if radius_room_trans_vignette <= 0 then
+                        reset_room_objects()
+                    end
                 else
                     room_current = room_next
                     copy_room_tiles(m_offset_template, m_offset_active)

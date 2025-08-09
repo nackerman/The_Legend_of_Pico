@@ -438,6 +438,7 @@ function is_player_dead()
             p.is_dead = true
 			i_frame_count = 0
         end
+		
         return true
     else 
         return false 
@@ -448,7 +449,7 @@ function calculate_player_death_vignettes()
 	if radius_outer_death_vignette >= radius_outer_death_vignette_min then
 		radius_outer_death_vignette -= 5
 	end
-	
+
 	if radius_inner_death_vignette >= radius_inner_death_vignette_min then
 		radius_inner_death_vignette -= 5
 	end

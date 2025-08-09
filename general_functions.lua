@@ -472,3 +472,12 @@ function check_player_in_door()
 		room_transition = false
 	end
 end
+
+function reset_room_objects()
+	bomb_active = false
+	bomb_timer = 0
+	bomb_explode = false
+	door_bombed = false
+	bomb_coord_sp = {0, 0}
+	bomb_cord_center = {0, 0}
+end
