@@ -13,8 +13,8 @@ function _init()
     display_cpu_usage = true
 
 	--game parameters
-    game_mode = "normal" --"normal" or "endless demo"
-	--game_mode = "endless_demo"
+    --game_mode = "normal" --"normal" or "endless demo"
+	game_mode = "endless_demo"
 	game_state = "game_start"
 	
 	global_timer = 0
@@ -39,7 +39,7 @@ function _init()
 		att_delay_count = 0,
 		att_held_prev = false,
 		att_hb,
-		hp = 0.5,
+		hp = 3,
 		hp_max = 3,
 		hp_true_max = 10,
 		hp_sp_full = 192,

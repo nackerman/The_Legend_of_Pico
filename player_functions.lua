@@ -1,6 +1,6 @@
 function player_move()
 	local d = get_priority_dir()
-	local cm = can_move()
+	local cm = can_move_p()
 	local left_ok = cm.left
 	local right_ok = cm.right
 	local up_ok = cm.up
@@ -146,7 +146,7 @@ function player_attack()
 	end
 end
 
-function can_move()
+function can_move_p()
 	--if token space becomes an
 	--issue, optimize this
 	local tile_x1
@@ -203,7 +203,7 @@ function can_move()
 	end
 	
 	return result
-end --can_move()
+end --can_move_p()
 
 function draw_player()
 	spr(p.sp, p.x, p.y, 1, 1, p.f)

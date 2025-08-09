@@ -227,13 +227,17 @@ function get_circle_bounds_at_y(y, cx, cy, r)
 	return {x1 = flr(x1), x2 = flr(x2)}
 end
 
-function get_hitbox_at(hb_dims, x, y)
-	return {
-		x1 = x + hb_dims.x1,
-		y1 = y + hb_dims.y1,
-		x2 = x + hb_dims.x2,
-		y2 = y + hb_dims.y2
-	}
+function get_hitbox_at(hb_dims, x, y, mode)
+	if mode == "full" then --full sprite hb
+		return {x1 = x, y1 = y, x2 = x + 7, y2 = y + 7}
+	else --damage hb
+		return {
+			x1 = x + hb_dims.x1,
+			y1 = y + hb_dims.y1,
+			x2 = x + hb_dims.x2,
+			y2 = y + hb_dims.y2
+		}
+	end
 end
 
 function draw_ui()
@@ -322,7 +326,7 @@ function get_coords_from_tile_key(key)
 	return tonum(sub(key, 1, i - 1)), tonum(sub(key, i + 1))
 end
 
-function a_star()
+function a_star(start, goal)
 	local open, closed = {}, {}
 	local start_key = get_tile_key(start.x, start.y)
 	
@@ -347,10 +351,16 @@ function a_star()
 			-- reconstruct path
 			local path = {}
 			while current do
-				add(path, 1, {x=current.x, y=current.y})
-				current = current.parent
+			add(path, {x=current.x, y=current.y})
+			current = current.parent
 			end
-			return path
+
+			local reversed = {}
+			for i = #path, 1, -1 do
+			add(reversed, path[i])
+			end
+
+			return reversed
 		end
 
 		open[current_key] = nil

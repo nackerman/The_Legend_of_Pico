@@ -49,120 +49,124 @@ function enemy_take_bomb_dmg()
 	end
 end
 
+function can_move_e(dir, e, e1)
+	if collision({x1 = e.hb_cur.x1 + dir[1], y1 = e.hb_cur.y1 + dir[2], x2 = e.hb_cur.x2 + dir[1], y2 = e.hb_cur.y2 + dir[2]}, e1.hb_cur) then
+		return false
+	else
+		return true
+	end
+end
+
 function move_enemies()
+	--local reserved = {}
+	--local new_dir = {0, 0}
+	--local e_can_move = true
+	
 	for e in all(enemies) do
-		local dx_p = e.x - p.x --delta x to player
-		local dy_p = e.y - p.y -- delta y to player
-		local can_move_left = true
-		local can_move_right = true
-		local can_move_up = true
-		local can_move_down = true
+		--default to no movment
+		e.x_next = e.x
+		e.y_next = e.y
 
-		new_direction = nil
+		if e.id == "bat" then
+			local dx_p = e.x - p.x --delta x to player
+			local dy_p = e.y - p.y -- delta y to player
 
-		if (abs(dx_p) > abs(dy_p)) then --move in x direction
-			if sgn(dx_p) == 1 then
-				new_direction = "left"
-			else
-				new_direction = "right"
-			end
-		else -- move in y direction
-			if sgn(dy_p) == 1 then
-				new_direction = "up"
-			else
-				new_direction = "down"
-			end
-		end
-
-		--check for collision with other enemies, prevent movement if collision would occur
-		for e1 in all(enemies) do
-			if e1 ~= e then
-				if new_direction == "left" then
-					if collision(
-						{ 	x1 = e.hb_cur.x1 - 1,
-							y1 = e.hb_cur.y1,
-							x2 = e.hb_cur.x2 - 1,
-							y2 = e.hb_cur.y2
-						}, e1.hb_cur) then
-						can_move_left = false
-					end
-				elseif new_direction == "right" then
-					if collision(
-						{ 	x1 = e.hb_cur.x1 + 1,
-							y1 = e.hb_cur.y1,
-							x2 = e.hb_cur.x2 + 1,
-							y2 = e.hb_cur.y2
-						}, e1.hb_cur) then
-						can_move_right = false
-					end
-				elseif new_direction == "up" then
-					if collision(
-						{ 	x1 = e.hb_cur.x1,
-							y1 = e.hb_cur.y1 - 1,
-							x2 = e.hb_cur.x2,
-							y2 = e.hb_cur.y2 - 1
-						}, e1.hb_cur) then
-						can_move_up = false
-					end
-				elseif new_direction == "down" then
-					if collision(
-						{ 	x1 = e.hb_cur.x1,
-							y1 = e.hb_cur.y1 + 1,
-							x2 = e.hb_cur.x2,
-							y2 = e.hb_cur.y2 + 1
-						}, e1.hb_cur) then
-						can_move_down = false
-					end
+			local new_dir = {0, 0}
+			if (abs(dx_p) > abs(dy_p)) then --move in x direction
+				if sgn(dx_p) == 1 then
+					new_dir = {-1, 0}
+				else
+					new_dir = {1, 0}
+				end
+			else -- move in y direction
+				if sgn(dy_p) == 1 then
+					new_dir = {0, -1}
+				else
+					new_dir = {0, 1}
 				end
 			end
-		end
-		
-		-- move enemies in new direction if they aren't blocked and if not stunned from taking damage
-		if global_timer%npc_anim_delay == 0 then
-			if new_direction == "left" and can_move_left 
-			and not e.sword_dmg_taken and not e.bomb_dmg_taken then 
-				e.x_next = e.x - 1 
-			end
 			
-			if new_direction == "right" and can_move_right 
-			and not e.sword_dmg_taken and not e.bomb_dmg_taken then
-				e.x_next = e.x + 1 
+			-- update enemies' next move coord in new dir if they aren't blocked and if not stunned from taking damage
+			if global_timer%npc_anim_delay == 0 then
+				if not e.sword_dmg_taken and not e.bomb_dmg_taken then 
+					e.x_next = e.x + new_dir[1]
+					e.y_next = e.y + new_dir[2]
+				end
 			end
+		else -- not a bat, ground-based enemies:
+			local enemy_tile = { x = flr(e.x/8), y = flr(e.y/8) }
+			local player_tile = { x = flr(p.x/8), y = flr(p.y/8) }
+			local path = a_star(enemy_tile, player_tile)
 
-			if new_direction == "up" and can_move_up 
-			and not e.sword_dmg_taken and not e.bomb_dmg_taken then 
-				e.y_next = e.y - 1
-			end
+			if path and #path > 1 and global_timer%npc_anim_delay == 0 then
+				local next_tile = path[2]
+				local target_x = next_tile.x*8
+				local target_y = next_tile.y*8
 
-			if new_direction == "down" and can_move_down 
-			and not e.sword_dmg_taken and not e.bomb_dmg_taken then
-				e.y_next = e.y + 1
+				local dx = target_x - e.x
+				local dy = target_y - e.y
+
+				if abs(dx) > abs(dy) then
+					-- move in x direction only
+					if dx > 0 then
+						e.x_next = e.x + 1
+					elseif dx < 0 then
+						e.x_next = e.x - 1
+					end
+					e.y_next = e.y
+				else
+					-- move in y direction only
+					if dy > 0 then
+						e.y_next = e.y + 1
+					elseif dy < 0 then
+						e.y_next = e.y - 1
+					end
+					e.x_next = e.x
+				end
 			end
 		end
 	end
 
+	-- Validate moves, move if able
 	local reserved = {}
 
 	for e in all(enemies) do
-		if reserved == nil then
-			add(reserved, get_hitbox_at(e.hb_dims, e.x_next, e.y_next))
+		local next_hb = get_hitbox_at(e.hb_dims, e.x_next, e.y_next, "full")
+        local can_move = true
+
+		if e.id ~= "bat" collides_with_wall(next_hb) then
+			can_move = false
+		end
+		
+		--check collision with stationary enemies
+		for other in all(enemies) do
+			if other ~= e then
+				local other_stationary = (other.x_next == other.x and other.y_next == other.y)
+				if other_stationary and collision(next_hb, other.hb_cur) then
+					can_move = false
+					break
+				end
+			end
+		end
+
+		--check against reserved positions
+		if can_move then
+			for r in all(reserved) do
+				if collision(r, next_hb) then
+					can_move = false
+					break
+				end
+			end
+		end
+
+		--if can move, make move
+		if can_move then
+			add(reserved, next_hb)
 			e.x = e.x_next
 			e.y = e.y_next
 		else
-			local can_reserve = true
-			for r in all(reserved) do
-				if collision(r, get_hitbox_at(e.hb_dims, e.x_next, e.y_next)) then
-					can_reserve = false
-					break				
-				end
-			end
-			
-			if can_reserve then
-				add(reserved, get_hitbox_at(e.hb_dims, e.x_next, e.y_next))
-				e.x = e.x_next
-				e.y = e.y_next
-			end
-			
+			e.x_next = e.x
+			e.y_next = e.y
 		end
 	end
 end
