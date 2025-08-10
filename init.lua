@@ -146,7 +146,7 @@ function _init()
 		{	--bat
 			key = 1, 
 			id = "bat",
-			sp = 64,
+			sp = 206,
 			hp_start = 1,
 			hb_dims = {
 				x1 = 1,
@@ -158,7 +158,7 @@ function _init()
 		{	--slime
 			key = 3,
 			id = "slime",
-			sp = 80,
+			sp = 222,
 			hp_start = 2,	
 			hb_dims = {
 				x1 = 0,
@@ -170,7 +170,7 @@ function _init()
 		{	--skeleton
 			key = 2,
 			id = "skeleton",
-			sp = 96,
+			sp = 238,
 			hp_start = 3,
 			hb_dims = {
 				x1 = 0,
@@ -288,10 +288,10 @@ function _init()
 				b2 = 93
 			},
 			secret_open = {
-				t1 = 204,
-				t2 = 205,
-				b1 = 220,
-				b2 = 221
+				t1 = 64,
+				t2 = 65,
+				b1 = 80,
+				b2 = 81
 			},
 			wall = {
 				t1 = 160,
@@ -320,10 +320,10 @@ function _init()
 				b2 = 95
 			},
 			secret_open = {
-				t1 = 206,
-				t2 = 207,
-				b1 = 222,
-				b2 = 223
+				t1 = 66,
+				t2 = 67,
+				b1 = 82,
+				b2 = 83
 			},
 			wall = {
 				t1 = 163,
@@ -352,10 +352,10 @@ function _init()
 				b2 = 125
 			},
 			secret_open = {
-				t1 = 236,
-				t2 = 237,
-				b1 = 252,
-				b2 = 253
+				t1 = 96,
+				t2 = 97,
+				b1 = 112,
+				b2 = 113
 			},
 			wall = {
 				t1 = 188,
@@ -384,10 +384,10 @@ function _init()
 				b2 = 127
 			},
 			secret_open = {
-				t1 = 238,
-				t2 = 239,
-				b1 = 254,
-				b2 = 255
+				t1 = 98,
+				t2 = 99,
+				b1 = 114,
+				b2 = 115
 			},
 			wall = {
 				t1 = 190,
