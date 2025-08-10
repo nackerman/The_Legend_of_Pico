@@ -1,10 +1,10 @@
 function player_move()
 	local d = get_priority_dir()
-	local cm = can_move_p()
-	local left_ok = cm.left
-	local right_ok = cm.right
-	local up_ok = cm.up
-	local down_ok = cm.down
+	local p_hb_dims_full = {x1 = 0, y1 = 0, x2 = 8, y2 = 8}
+	local left_ok = not collides_with_wall(p.x - 1, p.y, p_hb_dims_full)
+	local right_ok = not collides_with_wall(p.x + 1, p.y, p_hb_dims_full)
+	local up_ok = not collides_with_wall(p.x, p.y - 1, p_hb_dims_full)
+	local down_ok = not collides_with_wall(p.x, p.y + 1, p_hb_dims_full)
 	local soft_edge_px = 6      --can't be > 6
 	local soft_edge_spd = 1
 	local dist_top = p.y%8

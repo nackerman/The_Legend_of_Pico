@@ -75,13 +75,23 @@ function check_att_input()
 	return false
 end
 
-function collision(h1, h2)
-	return not (
-		h1.x2<h2.x1 or
-		h1.x1>h2.x2 or
-		h1.y2<h2.y1 or
-		h1.y1>h2.y2
-	)
+function collision(h1, h2, inclusive) --for use with attacks
+	if inclusive == nil then inclusive = true end
+	if inclusive then
+		return not (
+			h1.x2<h2.x1 or
+			h1.x1>h2.x2 or
+			h1.y2<h2.y1 or
+			h1.y1>h2.y2
+		)
+	else
+		return not (
+			h1.x2 <= h2.x1 or
+			h1.x1 >= h2.x2 or
+			h1.y2 <= h2.y1 or
+			h1.y1 >= h2.y2
+  		)
+	end
 end
 
 function draw_rupee_ui()
@@ -490,4 +500,27 @@ function reset_room_objects()
 	door_bombed = false
 	bomb_coord_sp = {0, 0}
 	bomb_cord_center = {0, 0}
+end
+
+function collides_with_wall(x, y, hb_dims)
+	local left 	= x + hb_dims.x1
+	local right = x + hb_dims.x1 + hb_dims.x2 - 1
+	local up 	= y + hb_dims.y1
+	local down 	= y + hb_dims.y1 + hb_dims.y2 - 1
+
+	local corners ={
+		{flr(left/8), 	flr(up/8)},
+		{flr(right/8), 	flr(up/8)},
+		{flr(left/8), 	flr(down/8)},
+		{flr(right/8), 	flr(down/8)}
+	}
+
+	for c in all(corners) do
+		local tile = mget(c[1] + m_offset_active[1], c[2] + m_offset_active[2])
+		if fget(tile, 0) then
+			return true --blocked by wall
+		end
+	end
+
+	return false --not blocked by wall
 end

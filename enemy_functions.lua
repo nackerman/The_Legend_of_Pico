@@ -57,11 +57,7 @@ function can_move_e(dir, e, e1)
 	end
 end
 
-function move_enemies()
-	--local reserved = {}
-	--local new_dir = {0, 0}
-	--local e_can_move = true
-	
+function move_enemies()	
 	for e in all(enemies) do
 		--default to no movment
 		e.x_next = e.x
@@ -134,15 +130,15 @@ function move_enemies()
 		local next_hb = get_hitbox_at(e.hb_dims, e.x_next, e.y_next, "full")
         local can_move = true
 
-		if e.id ~= "bat" collides_with_wall(next_hb) then
+		if e.id ~= "bat" and collides_with_wall(e.x_next, e.y_next, {x1=0,y1=0,x2=8,y2=8}) then
 			can_move = false
 		end
-		
+
 		--check collision with stationary enemies
 		for other in all(enemies) do
 			if other ~= e then
 				local other_stationary = (other.x_next == other.x and other.y_next == other.y)
-				if other_stationary and collision(next_hb, other.hb_cur) then
+				if other_stationary and collision(next_hb, other.hb_cur, false) then
 					can_move = false
 					break
 				end
@@ -152,7 +148,7 @@ function move_enemies()
 		--check against reserved positions
 		if can_move then
 			for r in all(reserved) do
-				if collision(r, next_hb) then
+				if collision(r, next_hb, false) then
 					can_move = false
 					break
 				end
@@ -174,7 +170,7 @@ end
 function spawn_enemies_endless()
 	local attempts = 0
 
-	while #enemies < 20 and attempts < 50 do
+	while #enemies < 10 and attempts < 50 do
 		attempts += 1
 
 		local key = flr(rnd(3)) + 1 --just bats, slimes, and skeletons, for now
