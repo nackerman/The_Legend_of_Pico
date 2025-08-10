@@ -288,15 +288,6 @@ function draw_vignette(cx, cy, r_outer, r_inner, fill_pattern)
 end
 
 --start a*
-function is_walkable(tx,ty)
-	--return false if out of bounds of the screen
-	if tx < 0 or tx > 15 or ty < 0 or ty > 15 then
-		return false
-	end
-	
-	return not fget(mget(tx + m_offset_active[1], ty + m_offset_active[2]), 0) -- check flag 0 of tile sprite
-end
-
 function heuristic(a,b) --manhattan distance
 	return abs(a.x - b.x) + abs (a.y - b.y)
 end
@@ -310,11 +301,10 @@ function get_neighbors(node)
 		local nx = node.x + d[1]
 		local ny = node.y + d[2]
 
-		if is_walkable(nx, ny) then
+		if not collides_with_wall(nx*8, ny*8, {x1 = 0, y1 = 0, x2 = 8, y2 = 8}) then
 			add(result, { x = nx, y = ny })
 		end
 	end
-	
 	return result
 end
 

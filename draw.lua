@@ -59,22 +59,12 @@ function _draw()
     end
 
     --debugging and testing
-    print()
-    --    for dir, hb in pairs(door_scroll_hb) do
-    --        if test == dir then
-    --            if p.is_aligned_with_door == dir then
-    --                rect(hb.x1, hb.y1, hb.x2, hb.y2, 11)
-    --            else
-    --                rect(hb.x1, hb.y1, hb.x2, hb.y2, 9)
-    --            end
-    --        else
-    --            rect(hb.x1, hb.y1, hb.x2, hb.y2, 7)
-    --        end
-    --    end
-
-        --print("init scroll: " .. test, 50, 121, 7)
-        --print("p.dir: " .. p.dir, 10, 10, 11)
-        --print("p.y: " .. p.y)
-        --print("left door hb y1: " .. door_scroll_hb["left"].y1)
-    --end debug and test
+    for i in all(path_test) do
+        local x1 = i.x*8
+        local y1 = i.y*8
+        local x2 = x1+8
+        local y2 = y1+8
+        rect(x1, y1, x2, y2, 14)
+        --print(tostr(test), 10, 10, 14)
+    end
 end

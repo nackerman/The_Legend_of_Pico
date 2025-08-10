@@ -155,18 +155,6 @@ function _init()
 				y2 = 3
 			}
 		},
-		{	--slime
-			key = 3,
-			id = "slime",
-			sp = 222,
-			hp_start = 2,	
-			hb_dims = {
-				x1 = 0,
-				y1 = 0,
-				x2 = 7,
-				y2 = 7
-			}
-		},
 		{	--skeleton
 			key = 2,
 			id = "skeleton",
@@ -179,6 +167,18 @@ function _init()
 				y2 = 7
 			}
 		},
+		{	--slime
+			key = 3,
+			id = "slime",
+			sp = 222,
+			hp_start = 2,	
+			hb_dims = {
+				x1 = 0,
+				y1 = 0,
+				x2 = 7,
+				y2 = 7
+			}
+		}
 	}
 
 	hb_dims = {
@@ -469,7 +469,7 @@ function _init()
 	radius_room_trans_vignette = 120
 
 	--testing
-	--test = "false"
+	--test = false
 	--end test
 
 end --end init

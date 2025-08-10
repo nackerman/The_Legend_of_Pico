@@ -49,13 +49,13 @@ function enemy_take_bomb_dmg()
 	end
 end
 
-function can_move_e(dir, e, e1)
-	if collision({x1 = e.hb_cur.x1 + dir[1], y1 = e.hb_cur.y1 + dir[2], x2 = e.hb_cur.x2 + dir[1], y2 = e.hb_cur.y2 + dir[2]}, e1.hb_cur) then
-		return false
-	else
-		return true
-	end
-end
+--function can_move_e(dir, e, e1)
+--	if collision({x1 = e.hb_cur.x1 + dir[1], y1 = e.hb_cur.y1 + dir[2], x2 = e.hb_cur.x2 + dir[1], y2 = e.hb_cur.y2 + dir[2]}, e1.hb_cur) then
+--		return false
+--	else
+--		return true
+--	end
+--end
 
 function move_enemies()	
 	for e in all(enemies) do
@@ -93,7 +93,8 @@ function move_enemies()
 			local enemy_tile = { x = flr(e.x/8), y = flr(e.y/8) }
 			local player_tile = { x = flr(p.x/8), y = flr(p.y/8) }
 			local path = a_star(enemy_tile, player_tile)
-
+			path_test = path
+			
 			if path and #path > 1 and global_timer%npc_anim_delay == 0 then
 				local next_tile = path[2]
 				local target_x = next_tile.x*8
@@ -105,6 +106,7 @@ function move_enemies()
 				if abs(dx) > abs(dy) then
 					-- move in x direction only
 					if dx > 0 then
+						--note: add 'soft-edge' nudge, here, to prevent getting stuck on walls
 						e.x_next = e.x + 1
 					elseif dx < 0 then
 						e.x_next = e.x - 1
@@ -113,6 +115,7 @@ function move_enemies()
 				else
 					-- move in y direction only
 					if dy > 0 then
+						--note: add 'soft-edge' nudge, here, to prevent getting stuck on walls
 						e.y_next = e.y + 1
 					elseif dy < 0 then
 						e.y_next = e.y - 1
@@ -170,10 +173,11 @@ end
 function spawn_enemies_endless()
 	local attempts = 0
 
-	while #enemies < 10 and attempts < 50 do
+	while #enemies < 1 and attempts < 50 do
 		attempts += 1
 
-		local key = flr(rnd(3)) + 1 --just bats, slimes, and skeletons, for now
+		local key = 2
+		--local key = flr(rnd(3)) + 1 --just bats, slimes, and skeletons, for now
 		local sp_x, sp_y
 
 		local x1 = enemy_type_def[key].hb_dims.x1
