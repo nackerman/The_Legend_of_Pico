@@ -61,7 +61,7 @@ function _init()
 		time_of_death
 	}
 
-	--directional buttons
+--directional button definitions
 	dir = {
 		btns = {
 			["left"]    = 0,
@@ -87,7 +87,7 @@ function _init()
 			["up"]      = false,
 			["down"]    = false
 		},
-		vec = {
+		vec = { --definition of vector movment directions
 			left = 	{ -1, 0 },
 			right = { 1, 0 },
 			up = 	{ 0, -1 },
@@ -138,6 +138,7 @@ function _init()
 			--bomb_dmg_taken	--has enemy taken bomb damage for this bomb cycle?
 			--}
 		--}
+
 	npc_anim_timer = 0
 	npc_anim_delay = 6
 	
