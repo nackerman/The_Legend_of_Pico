@@ -87,30 +87,42 @@ function move_enemies()
 			local path = a_star(enemy_tile, player_tile)
 			path_test = path
 			
+			
+
 			if path and #path > 1 and global_timer%npc_anim_delay == 0 then
-				local next_tile = path[2]
+				local next_tile
+				
+				if e.x ~= path[1].x*8 or e.y ~= path[1].y*8 then
+					if abs(e.x - (path[1].x*8)) <= 1 and abs(e.y - (path[1].y*8)) <= 1 then
+						del(path, 1)
+						next_tile = path[2]
+					else
+						next_tile = path[1]
+					end
+				else
+					next_tile = path[2]
+				end
+
 				local target_x = next_tile.x*8
 				local target_y = next_tile.y*8
 
 				local dx = target_x - e.x
 				local dy = target_y - e.y
+				local step_size = 1
 
 				if abs(dx) > abs(dy) then
 					-- move in x direction only
-					if dx > 0 then
-						--note: add 'soft-edge' nudge, here, to prevent getting stuck on walls
-						e.x_next = e.x + 1
-					elseif dx < 0 then
-						e.x_next = e.x - 1
+					if abs(dx) < step_size then --snap to target x, if within threshold
+						e.x_next = target_x
+					else
+						e.x_next = e.x + sgn(dx) * step_size
 					end
 					e.y_next = e.y
 				else
-					-- move in y direction only
-					if dy > 0 then
-						--note: add 'soft-edge' nudge, here, to prevent getting stuck on walls
-						e.y_next = e.y + 1
-					elseif dy < 0 then
-						e.y_next = e.y - 1
+					if abs(dy) < step_size then
+						e.y_next = target_y -- snap to target_y if close
+					else
+						e.y_next = e.y + sgn(dy) * step_size
 					end
 					e.x_next = e.x
 				end
