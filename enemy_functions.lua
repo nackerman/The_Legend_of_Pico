@@ -49,14 +49,6 @@ function enemy_take_bomb_dmg()
 	end
 end
 
---function can_move_e(dir, e, e1)
---	if collision({x1 = e.hb_cur.x1 + dir[1], y1 = e.hb_cur.y1 + dir[2], x2 = e.hb_cur.x2 + dir[1], y2 = e.hb_cur.y2 + dir[2]}, e1.hb_cur) then
---		return false
---	else
---		return true
---	end
---end
-
 function move_enemies()	
 	for e in all(enemies) do
 		--default to no movment
