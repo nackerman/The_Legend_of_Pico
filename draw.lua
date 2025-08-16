@@ -65,6 +65,11 @@ function _draw()
         local x2 = x1+8
         local y2 = y1+8
         rect(x1, y1, x2, y2, 14)
-        --print(tostr(test), 10, 10, 14)
+    end
+    if path_test then
+        print(tostr(path_test[1].x*8).." "..tostr(path_test[1].y*8), 10, 10, 14)
+    end
+    for e in all(enemies) do
+        print(tostr(e.x).." "..tostr(e.y), 10, 18, 14)
     end
 end
